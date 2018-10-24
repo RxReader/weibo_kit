@@ -12,6 +12,7 @@
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel = [FlutterMethodChannel methodChannelWithName:@"plugins.flutter.io/fake_weibo" binaryMessenger:[registrar messenger]];
     FakeWeiboPlugin* instance = [[FakeWeiboPlugin alloc] initWithChannel:channel];
+    [registrar addApplicationDelegate:instance];
     [registrar addMethodCallDelegate:instance channel:channel];
 }
 
@@ -119,6 +120,10 @@ static NSString * const ARGUMENT_KEY_RESULT_EXPIRATIONDATE = @"expirationDate";
 }
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [WeiboSDK handleOpenURL:url delegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
     return [WeiboSDK handleOpenURL:url delegate:self];
 }
 
