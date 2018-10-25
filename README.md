@@ -5,6 +5,25 @@ A new Flutter plugin.
 ## android
 
 ````
+...
+android {
+    ...
+    buildTypes {
+        ...
+        release {
+            ndk {
+                abiFilters 'armeabi-v7a'
+            }
+            ...
+        }
+        ...
+    }
+    ...
+}
+...
+````
+
+````
 # 微博混淆
 -keep class com.sina.deviceidjnisdk.** { *; }
 -keep class com.sina.weibo.sdk.** { *; }
