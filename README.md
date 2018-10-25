@@ -62,7 +62,7 @@ iOS 9系统策略更新，限制了http协议的访问，此外应用需要在�
 dependencies:
   fake_weibo:
     git:
-      url: http://git.xrjiot.cn/flutter_packages/fake_weibo.git
+      url: http://git.xrjiot.cn/flutter/packages/fake_weibo.git
 ````
 
 [示例](./example/lib/main.dart)
