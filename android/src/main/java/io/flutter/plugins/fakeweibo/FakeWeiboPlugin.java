@@ -80,7 +80,7 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
   private SsoHandler ssoHandler;
   private WbShareHandler shareHandler;
 
-  FakeWeiboPlugin(Registrar registrar, MethodChannel channel) {
+  private FakeWeiboPlugin(Registrar registrar, MethodChannel channel) {
     this.registrar = registrar;
     this.channel = channel;
   }
