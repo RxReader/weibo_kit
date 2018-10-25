@@ -112,9 +112,9 @@ class FakeWeibo {
   static const String _DEFAULT_REDIRECTURL =
       'https://api.weibo.com/oauth2/default.html';
 
-  final String appKey;
-  final List<String> scope;
-  final String redirectUrl;
+  final String _appKey;
+  final List<String> _scope;
+  final String _redirectUrl;
 
   final StreamController<FakeWeiboAuthResp> _authRespStreamController =
       new StreamController.broadcast();
@@ -123,20 +123,23 @@ class FakeWeibo {
       new StreamController.broadcast();
 
   FakeWeibo({
-    @required this.appKey,
-    @required this.scope,
-    this.redirectUrl: _DEFAULT_REDIRECTURL,
+    @required String appKey,
+    @required List<String> scope,
+    String redirectUrl: _DEFAULT_REDIRECTURL,
   })  : assert(appKey != null && appKey.isNotEmpty),
-        assert(scope != null && scope.isNotEmpty);
+        assert(scope != null && scope.isNotEmpty),
+        _appKey = appKey,
+        _scope = scope,
+        _redirectUrl = redirectUrl;
 
   Future<void> registerApp() {
     _channel.setMethodCallHandler(_handleMethod);
     return _channel.invokeMethod(
       _METHOD_REGISTERAPP,
       <String, dynamic>{
-        _ARGUMENT_KEY_APPKEY: appKey,
-        _ARGUMENT_KEY_SCOPE: scope.join(','),
-        _ARGUMENT_KEY_REDIRECTURL: redirectUrl,
+        _ARGUMENT_KEY_APPKEY: _appKey,
+        _ARGUMENT_KEY_SCOPE: _scope.join(','),
+        _ARGUMENT_KEY_REDIRECTURL: _redirectUrl,
       },
     );
   }
@@ -173,14 +176,12 @@ class FakeWeibo {
   }
 
   Future<void> auth() {
-    assert(scope != null && scope.isNotEmpty);
-    assert(redirectUrl != null && redirectUrl.isNotEmpty);
     return _channel.invokeMethod(
       _METHOD_AUTH,
       <String, dynamic>{
-        _ARGUMENT_KEY_APPKEY: appKey,
-        _ARGUMENT_KEY_SCOPE: scope.join(','),
-        _ARGUMENT_KEY_REDIRECTURL: redirectUrl,
+        _ARGUMENT_KEY_APPKEY: _appKey,
+        _ARGUMENT_KEY_SCOPE: _scope.join(','),
+        _ARGUMENT_KEY_REDIRECTURL: _redirectUrl,
       },
     );
   }
