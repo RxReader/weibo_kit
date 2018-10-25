@@ -2,7 +2,7 @@
 
 A new Flutter plugin.
 
-# android
+## android
 
 ````
 # 微博混淆
@@ -10,7 +10,7 @@ A new Flutter plugin.
 -keep class com.sina.weibo.sdk.** { *; }
 ````
 
-# ios
+## ios
 
 ````
 Capabilities
@@ -54,7 +54,7 @@ iOS 9系统策略更新，限制了http协议的访问，此外应用需要在�
 </dict>
 ````
 
-# flutter
+## flutter
 
 ````
 # pubspec.yml
