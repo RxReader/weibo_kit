@@ -24,7 +24,7 @@ android {
 ````
 
 ````
-# 微博混淆
+# 新浪微博
 -keep class com.sina.deviceidjnisdk.** { *; }
 -keep class com.sina.weibo.sdk.** { *; }
 ````
