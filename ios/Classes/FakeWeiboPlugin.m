@@ -135,7 +135,7 @@ static NSString * const ARGUMENT_KEY_RESULT_EXPIRATIONDATE = @"expirationDate";
 
 -(void)didReceiveWeiboResponse:(WBBaseResponse *)response {
     NSMutableDictionary * dictionary = [NSMutableDictionary dictionary];
-    [dictionary setObject:[NSNumber numberWithInteger:response.statusCode] forKey:ARGUMENT_KEY_RESULT_STATUSCODE];
+    [dictionary setValue:[NSNumber numberWithInteger:response.statusCode] forKey:ARGUMENT_KEY_RESULT_STATUSCODE];
     if ([response isKindOfClass:[WBAuthorizeResponse class]]) {
         if (response.statusCode == WeiboSDKResponseStatusCodeSuccess) {
             WBAuthorizeResponse * authorizeResponse = (WBAuthorizeResponse *) response;
@@ -143,10 +143,10 @@ static NSString * const ARGUMENT_KEY_RESULT_EXPIRATIONDATE = @"expirationDate";
             NSString * accessToken = authorizeResponse.accessToken;
             NSString * refreshToken = authorizeResponse.refreshToken;
             long long expirationDate = authorizeResponse.expirationDate.timeIntervalSince1970 * 1000;
-            [dictionary setObject:userId forKey:ARGUMENT_KEY_RESULT_USERID];
-            [dictionary setObject:accessToken forKey:ARGUMENT_KEY_RESULT_ACCESSTOKEN];
-            [dictionary setObject:refreshToken forKey:ARGUMENT_KEY_RESULT_REFRESHTOKEN];
-            [dictionary setObject:[NSNumber numberWithLongLong:expirationDate] forKey:ARGUMENT_KEY_RESULT_EXPIRATIONDATE];
+            [dictionary setValue:userId forKey:ARGUMENT_KEY_RESULT_USERID];
+            [dictionary setValue:accessToken forKey:ARGUMENT_KEY_RESULT_ACCESSTOKEN];
+            [dictionary setValue:refreshToken forKey:ARGUMENT_KEY_RESULT_REFRESHTOKEN];
+            [dictionary setValue:[NSNumber numberWithLongLong:expirationDate] forKey:ARGUMENT_KEY_RESULT_EXPIRATIONDATE];
         }
         [_channel invokeMethod:METHOD_ONAUTHRESP arguments:dictionary];
     } else if ([response isKindOfClass:[WBSendMessageToWeiboResponse class]]) {
