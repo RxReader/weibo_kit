@@ -1,8 +1,8 @@
 name: fake_weibo
 description: A new Flutter plugin.
 version: 0.0.1
-author:
-homepage:
+author: v7lin <v7lin@qq.com>
+homepage: https://github.com/v7lin/fake_weibo
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
