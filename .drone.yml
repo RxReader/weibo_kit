@@ -1,0 +1,10 @@
+kind: pipeline
+name: default
+
+steps:
+- name: publish
+  image: cirrusci/flutter:1.1.0
+  commands:
+  - flutter --version
+#  - flutter packages pub publish --dry-run
+  - flutter packages pub publish -f
