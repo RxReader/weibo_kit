@@ -63,7 +63,7 @@ class FakeWeiboAuthResp extends FakeWeiboBaseResp {
   final String userId;
   final String accessToken;
   final String refreshToken;
-  final String expirationDate;
+  final int expirationDate;
 
   FakeWeiboAuthResp._internal({
     @required int statusCode,
