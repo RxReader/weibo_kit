@@ -17,7 +17,7 @@ void main() {
 
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle =
-    const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 }
@@ -25,17 +25,17 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FakeWeibo weibo = new FakeWeibo(
+    FakeWeibo weibo = FakeWeibo(
       appKey: _weiboAppKey,
       scope: [
         FakeWeiboScope.ALL,
       ],
     );
     weibo.registerApp();
-    return new FakeWeiboProvider(
+    return FakeWeiboProvider(
       weibo: weibo,
-      child: new MaterialApp(
-        home: new Home(
+      child: MaterialApp(
+        home: Home(
           weibo: weibo,
         ),
       ),
@@ -50,7 +50,7 @@ class Home extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new _HomeState();
+    return _HomeState();
   }
 }
 
@@ -91,67 +91,73 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Fake Weibo Demo'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Fake Weibo Demo'),
       ),
-      body: new ListView(
+      body: ListView(
         children: <Widget>[
-          new ListTile(
-            title: new Text('环境检查'),
+          ListTile(
+            title: Text('环境检查'),
             onTap: () async {
               String content =
                   'weibo: ${await widget.weibo.isWeiboInstalled()}';
               _showTips('环境检查', content);
             },
           ),
-          new ListTile(
-            title: new Text('登录'),
+          ListTile(
+            title: Text('登录'),
             onTap: () {
               widget.weibo.auth();
             },
           ),
-          new ListTile(
-            title: new Text('用户信息'),
+          ListTile(
+            title: Text('用户信息'),
             onTap: () async {
               if (_authResp != null &&
                   _authResp.errorCode == FakeWeiboErrorCode.SUCCESS) {
-                FakeWeiboApiUserResp userResp = await widget.weibo
-                    .getUserInfo(appkey: _weiboAppKey, userId: _authResp.userId, accessToken: _authResp.accessToken);
-                if (userResp != null && userResp.errorCode == FakeWeiboApiBaseResp.ERROR_CODE_SUCCESS) {
-                  _showTips('用户信息', '${userResp.screenName}\n${userResp.description}\n${userResp.location}\n${userResp.profileImageUrl}');
+                FakeWeiboApiUserResp userResp = await widget.weibo.getUserInfo(
+                    appkey: _weiboAppKey,
+                    userId: _authResp.userId,
+                    accessToken: _authResp.accessToken);
+                if (userResp != null &&
+                    userResp.errorCode ==
+                        FakeWeiboApiBaseResp.ERROR_CODE_SUCCESS) {
+                  _showTips('用户信息',
+                      '${userResp.screenName}\n${userResp.description}\n${userResp.location}\n${userResp.profileImageUrl}');
                 } else {
-                  _showTips('用户信息', '获取用户信息失败\n${userResp.errorCode}:${userResp.error}');
+                  _showTips('用户信息',
+                      '获取用户信息失败\n${userResp.errorCode}:${userResp.error}');
                 }
               }
             },
           ),
-          new ListTile(
-            title: new Text('文字分享'),
+          ListTile(
+            title: Text('文字分享'),
             onTap: () {
               widget.weibo.shareText(
                 text: 'Share Text',
               );
             },
           ),
-          new ListTile(
-            title: new Text('图片分享'),
+          ListTile(
+            title: Text('图片分享'),
             onTap: () async {
-              AssetImage image = new AssetImage('images/icon/timg.jpeg');
+              AssetImage image = AssetImage('images/icon/timg.jpeg');
               AssetBundleImageKey key =
-              await image.obtainKey(createLocalImageConfiguration(context));
+                  await image.obtainKey(createLocalImageConfiguration(context));
               ByteData imageData = await key.bundle.load(key.name);
               await widget.weibo.shareImage(
                 imageData: imageData.buffer.asUint8List(),
               );
             },
           ),
-          new ListTile(
-            title: new Text('网页分享'),
+          ListTile(
+            title: Text('网页分享'),
             onTap: () async {
-              AssetImage image = new AssetImage('images/icon/ic_launcher.png');
+              AssetImage image = AssetImage('images/icon/ic_launcher.png');
               AssetBundleImageKey key =
-              await image.obtainKey(createLocalImageConfiguration(context));
+                  await image.obtainKey(createLocalImageConfiguration(context));
               ByteData thumbData = await key.bundle.load(key.name);
               await widget.weibo.shareWebpage(
                 title: 'title',
@@ -170,9 +176,9 @@ class _HomeState extends State<Home> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return new AlertDialog(
-          title: new Text(title),
-          content: new Text(content),
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
         );
       },
     );
