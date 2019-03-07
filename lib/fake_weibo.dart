@@ -398,9 +398,9 @@ class FakeWeibo {
     }).then((HttpClientResponse response) async {
       if (response.statusCode == HttpStatus.ok) {
         String content = await utf8.decodeStream(response);
-        Map<dynamic, dynamic> map = json.decode(content);
+        Map<dynamic, dynamic> map = json.decode(content) as Map<dynamic, dynamic>;
         int errorCode = map.containsKey(FakeWeiboApiBaseResp.KEY_ERROR_CODE)
-            ? map[FakeWeiboApiBaseResp.KEY_ERROR_CODE]
+            ? map[FakeWeiboApiBaseResp.KEY_ERROR_CODE] as int
             : FakeWeiboApiBaseResp.ERROR_CODE_SUCCESS;
         if (errorCode == FakeWeiboApiBaseResp.ERROR_CODE_SUCCESS) {
           return FakeWeiboApiUserResp._(
