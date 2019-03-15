@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fake_weibo/fake_weibo.dart';
 
-const String _weiboAppKey = '3393861383';
+const String _WEIBO_APP_KEY = '3393861383';
 
 void main() {
   runZoned(() {
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FakeWeibo weibo = FakeWeibo(
-      appKey: _weiboAppKey,
+      appKey: _WEIBO_APP_KEY,
       scope: [
         FakeWeiboScope.ALL,
       ],
@@ -117,7 +117,7 @@ class _HomeState extends State<Home> {
               if (_authResp != null &&
                   _authResp.errorCode == FakeWeiboErrorCode.SUCCESS) {
                 FakeWeiboApiUserResp userResp = await widget.weibo.getUserInfo(
-                    appkey: _weiboAppKey,
+                    appkey: _WEIBO_APP_KEY,
                     userId: _authResp.userId,
                     accessToken: _authResp.accessToken);
                 if (userResp != null &&
