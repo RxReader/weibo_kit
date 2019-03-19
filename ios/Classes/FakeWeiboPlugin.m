@@ -43,7 +43,7 @@ static NSString * const ARGUMENT_KEY_RESULT_ERRORMESSAGE = @"errorMessage";
 static NSString * const ARGUMENT_KEY_RESULT_USERID = @"userId";
 static NSString * const ARGUMENT_KEY_RESULT_ACCESSTOKEN = @"accessToken";
 static NSString * const ARGUMENT_KEY_RESULT_REFRESHTOKEN = @"refreshToken";
-static NSString * const ARGUMENT_KEY_RESULT_EXPIRATIONDATE = @"expirationDate";
+static NSString * const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
 
 -(instancetype)initWithChannel:(FlutterMethodChannel *)channel {
     self = [super init];
@@ -145,11 +145,11 @@ static NSString * const ARGUMENT_KEY_RESULT_EXPIRATIONDATE = @"expirationDate";
             NSString * userId = authorizeResponse.userID;
             NSString * accessToken = authorizeResponse.accessToken;
             NSString * refreshToken = authorizeResponse.refreshToken;
-            long long expirationDate = authorizeResponse.expirationDate.timeIntervalSince1970 * 1000;
+            long long expiresIn = ceil(authorizeResponse.expirationDate.timeIntervalSinceNow);// 向上取整
             [dictionary setValue:userId forKey:ARGUMENT_KEY_RESULT_USERID];
             [dictionary setValue:accessToken forKey:ARGUMENT_KEY_RESULT_ACCESSTOKEN];
             [dictionary setValue:refreshToken forKey:ARGUMENT_KEY_RESULT_REFRESHTOKEN];
-            [dictionary setValue:[NSNumber numberWithLongLong:expirationDate] forKey:ARGUMENT_KEY_RESULT_EXPIRATIONDATE];
+            [dictionary setValue:[NSNumber numberWithLongLong:expiresIn] forKey:ARGUMENT_KEY_RESULT_EXPIRESIN];
         }
         [_channel invokeMethod:METHOD_ONAUTHRESP arguments:dictionary];
     } else if ([response isKindOfClass:[WBSendMessageToWeiboResponse class]]) {

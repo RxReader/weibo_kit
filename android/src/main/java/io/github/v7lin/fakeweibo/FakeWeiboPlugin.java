@@ -41,7 +41,7 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
         channel.setMethodCallHandler(plugin);
     }
 
-    private static class FakeWeiboErrorCode {
+    private static class WeiboErrorCode {
         public static final int SUCCESS = 0;//成功
         public static final int USERCANCEL = -1;//用户取消发送
         public static final int SENT_FAIL = -2;//发送失败
@@ -79,7 +79,7 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
     private static final String ARGUMENT_KEY_RESULT_USERID = "userId";
     private static final String ARGUMENT_KEY_RESULT_ACCESSTOKEN = "accessToken";
     private static final String ARGUMENT_KEY_RESULT_REFRESHTOKEN = "refreshToken";
-    private static final String ARGUMENT_KEY_RESULT_EXPIRATIONDATE = "expirationDate";
+    private static final String ARGUMENT_KEY_RESULT_EXPIRESIN = "expiresIn";
 
     private final Registrar registrar;
     private final MethodChannel channel;
@@ -125,13 +125,14 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
                 public void onSuccess(Oauth2AccessToken oauth2AccessToken) {
                     Map<String, Object> map = new HashMap<>();
                     if (oauth2AccessToken.isSessionValid()) {
-                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.SUCCESS);
+                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.SUCCESS);
                         map.put(ARGUMENT_KEY_RESULT_USERID, oauth2AccessToken.getUid());
                         map.put(ARGUMENT_KEY_RESULT_ACCESSTOKEN, oauth2AccessToken.getToken());
                         map.put(ARGUMENT_KEY_RESULT_REFRESHTOKEN, oauth2AccessToken.getRefreshToken());
-                        map.put(ARGUMENT_KEY_RESULT_EXPIRATIONDATE, oauth2AccessToken.getExpiresTime());
+                        long expiresIn = (long) Math.ceil((oauth2AccessToken.getExpiresTime() - System.currentTimeMillis()) / 1000.0);
+                        map.put(ARGUMENT_KEY_RESULT_EXPIRESIN, expiresIn);// 向上取整
                     } else {
-                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.UNKNOWN);
+                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.UNKNOWN);
                     }
                     channel.invokeMethod(METHOD_ONAUTHRESP, map);
                 }
@@ -139,7 +140,7 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
                 @Override
                 public void cancel() {
                     Map<String, Object> map = new HashMap<>();
-                    map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.USERCANCEL);
+                    map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.USERCANCEL);
                     channel.invokeMethod(METHOD_ONAUTHRESP, map);
                 }
 
@@ -148,12 +149,12 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
                     // 微博有毒，WbConnectErrorMessage对象两个属性设置错误
                     if (TextUtils.equals(wbConnectErrorMessage.getErrorMessage(), "21338")) {
                         Map<String, Object> map = new HashMap<>();
-                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.SSO_PKG_SIGN_ERROR);
+                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.SSO_PKG_SIGN_ERROR);
                         map.put(ARGUMENT_KEY_RESULT_ERRORMESSAGE, wbConnectErrorMessage.getErrorCode());
                         channel.invokeMethod(METHOD_ONAUTHRESP, map);
                     } else {
                         Map<String, Object> map = new HashMap<>();
-                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.UNKNOWN);
+                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.UNKNOWN);
                         channel.invokeMethod(METHOD_ONAUTHRESP, map);
                     }
                 }
@@ -218,21 +219,21 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
                     @Override
                     public void onWbShareSuccess() {
                         Map<String, Object> map = new HashMap<>();
-                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.SUCCESS);
+                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.SUCCESS);
                         channel.invokeMethod(METHOD_ONSHAREMSGRESP, map);
                     }
 
                     @Override
                     public void onWbShareCancel() {
                         Map<String, Object> map = new HashMap<>();
-                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.USERCANCEL);
+                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.USERCANCEL);
                         channel.invokeMethod(METHOD_ONSHAREMSGRESP, map);
                     }
 
                     @Override
                     public void onWbShareFail() {
                         Map<String, Object> map = new HashMap<>();
-                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, FakeWeiboErrorCode.SHARE_IN_SDK_FAILED);
+                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.SHARE_IN_SDK_FAILED);
                         channel.invokeMethod(METHOD_ONSHAREMSGRESP, map);
                     }
                 });

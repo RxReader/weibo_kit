@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:fake_weibo/fake_weibo.dart';
 
 const String _WEIBO_APP_KEY = '3393861383';
+const List<String> _WEIBO_SCOPE = <String>[
+  WeiboScope.ALL,
+];
 
 void main() {
   runZoned(() {
@@ -25,14 +28,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FakeWeibo weibo = FakeWeibo(
-      appKey: _WEIBO_APP_KEY,
-      scope: [
-        FakeWeiboScope.ALL,
-      ],
-    );
-    weibo.registerApp();
-    return FakeWeiboProvider(
+    Weibo weibo = Weibo()
+      ..registerApp(
+        appKey: _WEIBO_APP_KEY,
+        scope: _WEIBO_SCOPE,
+      );
+    return WeiboProvider(
       weibo: weibo,
       child: MaterialApp(
         home: Home(
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
 class Home extends StatefulWidget {
   Home({Key key, @required this.weibo}) : super(key: key);
 
-  final FakeWeibo weibo;
+  final Weibo weibo;
 
   @override
   State<StatefulWidget> createState() {
@@ -55,10 +56,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  StreamSubscription<FakeWeiboAuthResp> _auth;
-  StreamSubscription<FakeWeiboShareMsgResp> _share;
+  StreamSubscription<WeiboAuthResp> _auth;
+  StreamSubscription<WeiboSdkResp> _share;
 
-  FakeWeiboAuthResp _authResp;
+  WeiboAuthResp _authResp;
 
   @override
   void initState() {
@@ -67,13 +68,13 @@ class _HomeState extends State<Home> {
     _share = widget.weibo.shareMsgResp().listen(_listenShareMsg);
   }
 
-  void _listenAuth(FakeWeiboAuthResp resp) {
+  void _listenAuth(WeiboAuthResp resp) {
     _authResp = resp;
     String content = 'auth: ${resp.errorCode}';
     _showTips('登录', content);
   }
 
-  void _listenShareMsg(FakeWeiboShareMsgResp resp) {
+  void _listenShareMsg(WeiboSdkResp resp) {
     String content = 'share: ${resp.errorCode}';
     _showTips('分享', content);
   }
@@ -108,26 +109,29 @@ class _HomeState extends State<Home> {
           ListTile(
             title: Text('登录'),
             onTap: () {
-              widget.weibo.auth();
+              widget.weibo.auth(
+                appKey: _WEIBO_APP_KEY,
+                scope: _WEIBO_SCOPE,
+              );
             },
           ),
           ListTile(
             title: Text('用户信息'),
             onTap: () async {
               if (_authResp != null &&
-                  _authResp.errorCode == FakeWeiboErrorCode.SUCCESS) {
-                FakeWeiboApiUserResp userResp = await widget.weibo.getUserInfo(
-                    appkey: _WEIBO_APP_KEY,
-                    userId: _authResp.userId,
-                    accessToken: _authResp.accessToken);
-                if (userResp != null &&
-                    userResp.errorCode ==
-                        FakeWeiboApiBaseResp.ERROR_CODE_SUCCESS) {
+                  _authResp.errorCode == WeiboSdkResp.SUCCESS) {
+                WeiboUserInfoResp userInfoResp = await widget.weibo.getUserInfo(
+                  appkey: _WEIBO_APP_KEY,
+                  userId: _authResp.userId,
+                  accessToken: _authResp.accessToken,
+                );
+                if (userInfoResp != null &&
+                    userInfoResp.errorCode == WeiboApiResp.ERROR_CODE_SUCCESS) {
                   _showTips('用户信息',
-                      '${userResp.screenName}\n${userResp.description}\n${userResp.location}\n${userResp.profileImageUrl}');
+                      '${userInfoResp.screenName}\n${userInfoResp.description}\n${userInfoResp.location}\n${userInfoResp.profileImageUrl}');
                 } else {
                   _showTips('用户信息',
-                      '获取用户信息失败\n${userResp.errorCode}:${userResp.error}');
+                      '获取用户信息失败\n${userInfoResp.errorCode}:${userInfoResp.error}');
                 }
               }
             },
