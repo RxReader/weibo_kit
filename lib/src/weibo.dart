@@ -7,7 +7,6 @@ import 'package:fake_weibo/src/domain/api/weibo_user_info_resp.dart';
 import 'package:fake_weibo/src/domain/sdk/weibo_auth_resp.dart';
 import 'package:fake_weibo/src/domain/sdk/weibo_sdk_resp.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 class Weibo {
@@ -197,25 +196,5 @@ class Weibo {
         _ARGUMENT_KEY_WEBPAGEURL: webpageUrl,
       },
     );
-  }
-}
-
-class WeiboProvider extends InheritedWidget {
-  WeiboProvider({
-    Key key,
-    @required this.weibo,
-    @required Widget child,
-  }) : super(key: key, child: child);
-
-  final Weibo weibo;
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) {
-    WeiboProvider oldProvider = oldWidget as WeiboProvider;
-    return weibo != oldProvider.weibo;
-  }
-
-  static WeiboProvider of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(WeiboProvider) as WeiboProvider;
   }
 }
