@@ -78,12 +78,8 @@ dependencies:
 * release
 
 ````
-latestVersion = 0.1.0
-````
-
-````
 dependencies:
-  fake_weibo: ^${latestVersion}
+  fake_weibo: ^${latestTag}
 ````
 
 * example
