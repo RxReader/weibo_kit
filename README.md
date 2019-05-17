@@ -1,6 +1,7 @@
 # fake_weibo
 
 [![Build Status](https://cloud.drone.io/api/badges/v7lin/fake_weibo/status.svg)](https://cloud.drone.io/v7lin/fake_weibo)
+[![Codecov](https://codecov.io/gh/v7lin/fake_weibo/branch/master/graph/badge.svg)](https://codecov.io/gh/v7lin/fake_weibo)
 [![GitHub Tag](https://img.shields.io/github/tag/v7lin/fake_weibo.svg)](https://github.com/v7lin/fake_weibo/releases)
 [![Pub Package](https://img.shields.io/pub/v/fake_weibo.svg)](https://pub.dartlang.org/packages/fake_weibo)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/v7lin/fake_weibo/blob/master/LICENSE)
