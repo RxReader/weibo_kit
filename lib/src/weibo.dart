@@ -33,8 +33,8 @@ class Weibo {
   static const String _DEFAULT_REDIRECTURL =
       'https://api.weibo.com/oauth2/default.html';
 
-  static const MethodChannel _channel =
-      MethodChannel('v7lin.github.io/fake_weibo');
+  final MethodChannel _channel =
+      const MethodChannel('v7lin.github.io/fake_weibo');
 
   final StreamController<WeiboAuthResp> _authRespStreamController =
       StreamController<WeiboAuthResp>.broadcast();
