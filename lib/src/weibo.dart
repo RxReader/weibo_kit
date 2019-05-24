@@ -74,10 +74,12 @@ class Weibo {
     }
   }
 
+  /// 登录
   Stream<WeiboAuthResp> authResp() {
     return _authRespStreamController.stream;
   }
 
+  /// 分享
   Stream<WeiboSdkResp> shareMsgResp() {
     return _shareMsgRespStreamController.stream;
   }
@@ -86,6 +88,7 @@ class Weibo {
     return (await _channel.invokeMethod(_METHOD_ISWEIBOINSTALLED)) as bool;
   }
 
+  /// 登录
   Future<void> auth({
     @required String appKey,
     @required List<String> scope,
@@ -103,6 +106,7 @@ class Weibo {
     );
   }
 
+  /// 用户信息
   Future<WeiboUserInfoResp> getUserInfo({
     @required String appkey,
     @required String userId,
@@ -137,7 +141,6 @@ class Weibo {
   ) {
     params.putIfAbsent('source', () => appkey);
     params.putIfAbsent('access_token', () => accessToken);
-
     Uri baseUri = Uri.parse(baseUrl);
     Map<String, List<String>> queryParametersAll =
         Map<String, List<String>>.of(baseUri.queryParametersAll);
@@ -145,10 +148,10 @@ class Weibo {
       queryParametersAll.remove(key);
       queryParametersAll.putIfAbsent(key, () => <String>[value]);
     });
-
     return baseUri.replace(queryParameters: queryParametersAll);
   }
 
+  /// 分享 - 文本
   Future<void> shareText({
     @required String text,
   }) {
@@ -161,6 +164,7 @@ class Weibo {
     );
   }
 
+  /// 分享 - 图片
   Future<void> shareImage({
     @required Uint8List imageData,
   }) {
@@ -173,6 +177,7 @@ class Weibo {
     );
   }
 
+  /// 分享 - 网页
   Future<void> shareWebpage({
     @required String title,
     @required String description,

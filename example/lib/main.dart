@@ -42,7 +42,11 @@ class _HomeState extends State<Home> {
     WeiboScope.ALL,
   ];
 
-  Weibo _weibo = Weibo();
+  Weibo _weibo = Weibo()
+    ..registerApp(
+      appKey: _WEIBO_APP_KEY,
+      scope: _WEIBO_SCOPE,
+    );
 
   StreamSubscription<WeiboAuthResp> _auth;
   StreamSubscription<WeiboSdkResp> _share;
@@ -52,10 +56,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _weibo.registerApp(
-      appKey: _WEIBO_APP_KEY,
-      scope: _WEIBO_SCOPE,
-    );
     _auth = _weibo.authResp().listen(_listenAuth);
     _share = _weibo.shareMsgResp().listen(_listenShareMsg);
   }
