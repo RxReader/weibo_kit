@@ -1,6 +1,7 @@
 package io.github.v7lin.fakeweibo;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.sina.weibo.sdk.WbSdk;
@@ -72,6 +73,7 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
     private static final String ARGUMENT_KEY_DESCRIPTION = "description";
     private static final String ARGUMENT_KEY_THUMBDATA = "thumbData";
     private static final String ARGUMENT_KEY_IMAGEDATA = "imageData";
+    private static final String ARGUMENT_KEY_IMAGEURI = "imageUri";
     private static final String ARGUMENT_KEY_WEBPAGEURL = "webpageUrl";
 
     private static final String ARGUMENT_KEY_RESULT_ERRORCODE = "errorCode";
@@ -182,8 +184,20 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
             WeiboMultiMessage message = new WeiboMultiMessage();
 
             if (METHOD_SHAREIMAGE.equals(call.method)) {
+                if (call.hasArgument(ARGUMENT_KEY_TEXT)) {
+                    TextObject object = new TextObject();
+                    object.text = call.argument(ARGUMENT_KEY_TEXT);// 1024
+
+                    message.textObject = object;
+                }
+
                 ImageObject object = new ImageObject();
-                object.imageData = call.argument(ARGUMENT_KEY_IMAGEDATA);// 2 * 1024 * 1024
+                if (call.hasArgument(ARGUMENT_KEY_IMAGEDATA)) {
+                    object.imageData = call.argument(ARGUMENT_KEY_IMAGEDATA);// 2 * 1024 * 1024
+                } else if (call.hasArgument(ARGUMENT_KEY_IMAGEURI)) {
+                    String imageUri = call.argument(ARGUMENT_KEY_IMAGEURI);
+                    object.imagePath = Uri.parse(imageUri).getPath();// 512 - 10 * 1024 * 1024
+                }
 
                 message.mediaObject = object;
             } else if (METHOD_SHAREWEBPAGE.equals(call.method)) {

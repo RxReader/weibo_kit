@@ -28,19 +28,22 @@ class Weibo {
   static const String _ARGUMENT_KEY_DESCRIPTION = 'description';
   static const String _ARGUMENT_KEY_THUMBDATA = 'thumbData';
   static const String _ARGUMENT_KEY_IMAGEDATA = 'imageData';
+  static const String _ARGUMENT_KEY_IMAGEURI = 'imageUri';
   static const String _ARGUMENT_KEY_WEBPAGEURL = 'webpageUrl';
+
+  static const String _SCHEME_FILE = 'file';
 
   static const String _DEFAULT_REDIRECTURL =
       'https://api.weibo.com/oauth2/default.html';
 
   final MethodChannel _channel =
-      const MethodChannel('v7lin.github.io/fake_weibo');
+  const MethodChannel('v7lin.github.io/fake_weibo');
 
   final StreamController<WeiboAuthResp> _authRespStreamController =
-      StreamController<WeiboAuthResp>.broadcast();
+  StreamController<WeiboAuthResp>.broadcast();
 
   final StreamController<WeiboSdkResp> _shareMsgRespStreamController =
-      StreamController<WeiboSdkResp>.broadcast();
+  StreamController<WeiboSdkResp>.broadcast();
 
   Future<void> registerApp({
     @required String appKey,
@@ -119,7 +122,7 @@ class Weibo {
     };
     return HttpClient()
         .getUrl(_encodeUrl('https://api.weibo.com/2/users/show.json', appkey,
-            accessToken, params))
+        accessToken, params))
         .then((HttpClientRequest request) {
       return request.close();
     }).then((HttpClientResponse response) async {
@@ -129,21 +132,20 @@ class Weibo {
             .fromMap(json.decode(content) as Map<dynamic, dynamic>);
       }
       throw HttpException(
-          'HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
+          'HttpResponse statusCode: ${response
+              .statusCode}, reasonPhrase: ${response.reasonPhrase}.');
     });
   }
 
-  Uri _encodeUrl(
-    String baseUrl,
-    String appkey,
-    String accessToken,
-    Map<String, String> params,
-  ) {
+  Uri _encodeUrl(String baseUrl,
+      String appkey,
+      String accessToken,
+      Map<String, String> params,) {
     params.putIfAbsent('source', () => appkey);
     params.putIfAbsent('access_token', () => accessToken);
     Uri baseUri = Uri.parse(baseUrl);
     Map<String, List<String>> queryParametersAll =
-        Map<String, List<String>>.of(baseUri.queryParametersAll);
+    Map<String, List<String>>.of(baseUri.queryParametersAll);
     params.forEach((String key, String value) {
       queryParametersAll.remove(key);
       queryParametersAll.putIfAbsent(key, () => <String>[value]);
@@ -155,7 +157,7 @@ class Weibo {
   Future<void> shareText({
     @required String text,
   }) {
-    assert(text != null && text.isNotEmpty && text.length <= 1024);
+    assert(text != null && text.length <= 1024);
     return _channel.invokeMethod(
       _METHOD_SHARETEXT,
       <String, dynamic>{
@@ -166,15 +168,27 @@ class Weibo {
 
   /// 分享 - 图片
   Future<void> shareImage({
-    @required Uint8List imageData,
+    String text,
+    Uint8List imageData,
+    Uri imageUri,
   }) {
-    assert(imageData != null && imageData.lengthInBytes <= 2 * 1024 * 1024);
-    return _channel.invokeMethod(
-      _METHOD_SHAREIMAGE,
-      <String, dynamic>{
-        _ARGUMENT_KEY_IMAGEDATA: imageData,
-      },
-    );
+    assert(text == null || text.length <= 1024);
+    assert((imageData != null && imageData.lengthInBytes <= 2 * 1024 * 1024) ||
+        (imageUri != null &&
+            imageUri.isScheme(_SCHEME_FILE) &&
+            imageUri.toFilePath().length <= 512 &&
+            File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
+    Map<String, dynamic> map = <String, dynamic>{};
+    if (text != null && text.isNotEmpty) {
+      map.putIfAbsent(_ARGUMENT_KEY_TEXT, () => text);
+    }
+    if (imageData != null) {
+      map.putIfAbsent(_ARGUMENT_KEY_IMAGEDATA, () => imageData);
+    }
+    if (imageUri != null) {
+      map.putIfAbsent(_ARGUMENT_KEY_IMAGEURI, () => imageUri.toString());
+    }
+    return _channel.invokeMethod(_METHOD_SHAREIMAGE, map);
   }
 
   /// 分享 - 网页

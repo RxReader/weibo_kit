@@ -20,6 +20,13 @@ flutter版新浪微博SDK
 
 * [simple_pub_server](https://github.com/v7lin/simple_pub_server)
 
+## docs
+
+* [Android 应用接入](https://open.weibo.com/wiki/Sdk/android)
+* [iOS 应用接入](https://open.weibo.com/wiki/Sdk/ios)
+* [Android Github](https://github.com/sinaweibosdk/weibo_android_sdk)
+* [iOS Github](https://github.com/sinaweibosdk/weibo_ios_sdk)
+
 ## android
 
 ````

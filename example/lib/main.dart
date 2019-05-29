@@ -143,6 +143,7 @@ class _HomeState extends State<Home> {
                   await image.obtainKey(createLocalImageConfiguration(context));
               ByteData imageData = await key.bundle.load(key.name);
               await _weibo.shareImage(
+                text: 'Share Text',
                 imageData: imageData.buffer.asUint8List(),
               );
             },

@@ -36,6 +36,7 @@ static NSString * const ARGUMENT_KEY_TITLE = @"title";
 static NSString * const ARGUMENT_KEY_DESCRIPTION = @"description";
 static NSString * const ARGUMENT_KEY_THUMBDATA = @"thumbData";
 static NSString * const ARGUMENT_KEY_IMAGEDATA = @"imageData";
+static NSString * const ARGUMENT_KEY_IMAGEURI = @"imageUri";
 static NSString * const ARGUMENT_KEY_WEBPAGEURL = @"webpageUrl";
 
 static NSString * const ARGUMENT_KEY_RESULT_ERRORCODE = @"errorCode";
@@ -95,9 +96,16 @@ static NSString * const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
     WBSendMessageToWeiboRequest * request = [WBSendMessageToWeiboRequest request];
     WBMessageObject * message = [WBMessageObject message];
     if ([METHOD_SHAREIMAGE isEqualToString:call.method]) {
+        message.text = call.arguments[ARGUMENT_KEY_TEXT];
         WBImageObject * object = [WBImageObject object];
         FlutterStandardTypedData * imageData = call.arguments[ARGUMENT_KEY_IMAGEDATA];
-        object.imageData = imageData.data;
+        if (imageData != nil) {
+            object.imageData = imageData.data;
+        } else {
+            NSString * imageUri = call.arguments[ARGUMENT_KEY_IMAGEURI];
+            NSURL * imageUrl = [NSURL URLWithString:imageUri];
+            object.imageData = [NSData dataWithContentsOfFile:imageUrl.path];
+        }
         message.imageObject = object;
     } else if ([METHOD_SHAREWEBPAGE isEqualToString:call.method]) {
         WBWebpageObject * object = [WBWebpageObject object];
