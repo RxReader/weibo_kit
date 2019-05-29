@@ -37,13 +37,13 @@ class Weibo {
       'https://api.weibo.com/oauth2/default.html';
 
   final MethodChannel _channel =
-  const MethodChannel('v7lin.github.io/fake_weibo');
+      const MethodChannel('v7lin.github.io/fake_weibo');
 
   final StreamController<WeiboAuthResp> _authRespStreamController =
-  StreamController<WeiboAuthResp>.broadcast();
+      StreamController<WeiboAuthResp>.broadcast();
 
   final StreamController<WeiboSdkResp> _shareMsgRespStreamController =
-  StreamController<WeiboSdkResp>.broadcast();
+      StreamController<WeiboSdkResp>.broadcast();
 
   Future<void> registerApp({
     @required String appKey,
@@ -122,7 +122,7 @@ class Weibo {
     };
     return HttpClient()
         .getUrl(_encodeUrl('https://api.weibo.com/2/users/show.json', appkey,
-        accessToken, params))
+            accessToken, params))
         .then((HttpClientRequest request) {
       return request.close();
     }).then((HttpClientResponse response) async {
@@ -132,20 +132,21 @@ class Weibo {
             .fromMap(json.decode(content) as Map<dynamic, dynamic>);
       }
       throw HttpException(
-          'HttpResponse statusCode: ${response
-              .statusCode}, reasonPhrase: ${response.reasonPhrase}.');
+          'HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
     });
   }
 
-  Uri _encodeUrl(String baseUrl,
-      String appkey,
-      String accessToken,
-      Map<String, String> params,) {
+  Uri _encodeUrl(
+    String baseUrl,
+    String appkey,
+    String accessToken,
+    Map<String, String> params,
+  ) {
     params.putIfAbsent('source', () => appkey);
     params.putIfAbsent('access_token', () => accessToken);
     Uri baseUri = Uri.parse(baseUrl);
     Map<String, List<String>> queryParametersAll =
-    Map<String, List<String>>.of(baseUri.queryParametersAll);
+        Map<String, List<String>>.of(baseUri.queryParametersAll);
     params.forEach((String key, String value) {
       queryParametersAll.remove(key);
       queryParametersAll.putIfAbsent(key, () => <String>[value]);
