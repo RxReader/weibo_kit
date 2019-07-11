@@ -10,6 +10,10 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 class Weibo {
+  Weibo() {
+    _channel.setMethodCallHandler(_handleMethod);
+  }
+
   static const String _METHOD_REGISTERAPP = 'registerApp';
   static const String _METHOD_ISWEIBOINSTALLED = 'isWeiboInstalled';
   static const String _METHOD_AUTH = 'auth';
@@ -53,7 +57,6 @@ class Weibo {
   }) {
     assert(appKey != null && appKey.isNotEmpty);
     assert(scope != null && scope.isNotEmpty);
-    _channel.setMethodCallHandler(_handleMethod);
     return _channel.invokeMethod(
       _METHOD_REGISTERAPP,
       <String, dynamic>{
