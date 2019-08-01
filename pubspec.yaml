@@ -1,6 +1,6 @@
 name: fake_weibo
 description: A powerful weibo plugin for Flutter.
-version: 0.2.2
+version: 0.2.3
 author: v7lin <v7lin@qq.com>
 homepage: https://github.com/v7lin/fake_weibo
 
@@ -11,9 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  meta: '>=1.1.6 <2.0.0'
+  meta: ^1.1.6
 
-  jaguar_serializer: '>=2.2.12 <3.0.0'
+  jaguar_serializer: ^2.2.12
 
 dev_dependencies:
   flutter_test:

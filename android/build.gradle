@@ -31,15 +31,18 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+
+        // library 混淆 -> 随 library 引用，自动添加到 apk 打包混淆
+        consumerProguardFiles 'consumer-proguard-rules.txt'
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     lintOptions {
         disable 'InvalidPackage'
     }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    implementation 'io.github.v7lin:weibo-android:4.3.4'
+    implementation 'com.sina.weibo.sdk:core:4.4.2:openDefaultRelease@aar'
 }
