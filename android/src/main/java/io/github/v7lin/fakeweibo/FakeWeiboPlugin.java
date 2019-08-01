@@ -252,6 +252,7 @@ public class FakeWeiboPlugin implements MethodCallHandler, PluginRegistry.Activi
                     }
                 });
             }
+            return true;
         }
         return false;
     }
