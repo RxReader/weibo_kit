@@ -1,3 +1,8 @@
+## 0.2.4 - 2019.9.26
+
+* 降级Android SDK
+* 升级iOS SDK
+
 ## 0.2.3 - 2019.8.1
 
 * 升级Android SDK

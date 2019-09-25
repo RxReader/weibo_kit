@@ -44,5 +44,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.sina.weibo.sdk:core:4.4.2:openDefaultRelease@aar'
+    implementation 'com.sina.weibo.sdk:core:4.3.4:openDefaultRelease@aar'
 }
