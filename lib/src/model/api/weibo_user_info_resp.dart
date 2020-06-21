@@ -1,12 +1,13 @@
-import 'package:jaguar_serializer/jaguar_serializer.dart';
-import 'package:fake_weibo/src/domain/api/weibo_api_resp.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:weibo_kit/src/model/api/weibo_api_resp.dart';
 
-part 'weibo_user_info_resp.jser.dart';
+part 'weibo_user_info_resp.g.dart';
 
-@GenSerializer(nameFormatter: toSnakeCase)
-class WeiboUserInfoRespSerializer extends Serializer<WeiboUserInfoResp>
-    with _$WeiboUserInfoRespSerializer {}
-
+@JsonSerializable(
+  anyMap: true,
+  explicitToJson: true,
+  fieldRename: FieldRename.snake,
+)
 class WeiboUserInfoResp extends WeiboApiResp {
   WeiboUserInfoResp({
     int errorCode,
@@ -23,6 +24,8 @@ class WeiboUserInfoResp extends WeiboApiResp {
     this.avatarLarge,
     this.avatarHd,
   }) : super(errorCode: errorCode, error: error, request: request);
+
+  factory WeiboUserInfoResp.fromJson(Map<dynamic, dynamic> json) => _$WeiboUserInfoRespFromJson(json);
 
   /// 用户UID（int64）
   final int id;
@@ -61,4 +64,6 @@ class WeiboUserInfoResp extends WeiboApiResp {
   bool isFemale() {
     return gender == 'f';
   }
+
+  Map<dynamic, dynamic> toJson() => _$WeiboUserInfoRespToJson(this);
 }

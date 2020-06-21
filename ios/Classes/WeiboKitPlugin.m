@@ -1,25 +1,25 @@
-#import "FakeWeiboPlugin.h"
+#import "WeiboKitPlugin.h"
 #import <Weibo_SDK/WeiboSDK.h>
 
-@interface FakeWeiboPlugin () <WeiboSDKDelegate>
+@interface WeiboKitPlugin () <WeiboSDKDelegate>
 
 @end
 
-@implementation FakeWeiboPlugin {
+@implementation WeiboKitPlugin {
     FlutterMethodChannel * _channel;
 }
 
-+ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-    FlutterMethodChannel* channel = [FlutterMethodChannel
-                                     methodChannelWithName:@"v7lin.github.io/fake_weibo"
-                                     binaryMessenger:[registrar messenger]];
-    FakeWeiboPlugin* instance = [[FakeWeiboPlugin alloc] initWithChannel:channel];
-    [registrar addApplicationDelegate:instance];
-    [registrar addMethodCallDelegate:instance channel:channel];
++ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
+  FlutterMethodChannel *channel =
+      [FlutterMethodChannel methodChannelWithName:@"v7lin.github.io/weibo_kit"
+                                  binaryMessenger:[registrar messenger]];
+  WeiboKitPlugin *instance = [[WeiboKitPlugin alloc] initWithChannel:channel];
+  [registrar addApplicationDelegate:instance];
+  [registrar addMethodCallDelegate:instance channel:channel];
 }
 
 static NSString * const METHOD_REGISTERAPP = @"registerApp";
-static NSString * const METHOD_ISWEIBOINSTALLED = @"isWeiboInstalled";
+static NSString * const METHOD_ISINSTALLED = @"isInstalled";
 static NSString * const METHOD_AUTH = @"auth";
 static NSString * const METHOD_SHARETEXT = @"shareText";
 static NSString * const METHOD_SHAREIMAGE = @"shareImage";
@@ -54,23 +54,24 @@ static NSString * const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
     return self;
 }
 
-- (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    if ([METHOD_REGISTERAPP isEqualToString:call.method]) {
-        NSString * appKey = call.arguments[ARGUMENT_KEY_APPKEY];
-        [WeiboSDK registerApp:appKey];
-        result(nil);
-    } else if ([METHOD_ISWEIBOINSTALLED isEqualToString:call.method]) {
-        result([NSNumber numberWithBool:[WeiboSDK isWeiboAppInstalled]]);
-    } else if ([METHOD_AUTH isEqualToString:call.method]) {
-        [self handleAuthCall:call result:result];
-    } else if ([METHOD_SHARETEXT isEqualToString:call.method]) {
-        [self handleShareTextCall:call result:result];
-    } else if ([METHOD_SHAREIMAGE isEqualToString:call.method] ||
-               [METHOD_SHAREWEBPAGE isEqualToString:call.method]) {
-        [self handleShareMediaCall:call result:result];
-    } else {
-        result(FlutterMethodNotImplemented);
-    }
+- (void)handleMethodCall:(FlutterMethodCall *)call
+                  result:(FlutterResult)result {
+  if ([METHOD_REGISTERAPP isEqualToString:call.method]) {
+      NSString * appKey = call.arguments[ARGUMENT_KEY_APPKEY];
+      [WeiboSDK registerApp:appKey];
+      result(nil);
+  } else if ([METHOD_ISINSTALLED isEqualToString:call.method]) {
+      result([NSNumber numberWithBool:[WeiboSDK isWeiboAppInstalled]]);
+  } else if ([METHOD_AUTH isEqualToString:call.method]) {
+      [self handleAuthCall:call result:result];
+  } else if ([METHOD_SHARETEXT isEqualToString:call.method]) {
+      [self handleShareTextCall:call result:result];
+  } else if ([METHOD_SHAREIMAGE isEqualToString:call.method] ||
+             [METHOD_SHAREWEBPAGE isEqualToString:call.method]) {
+      [self handleShareMediaCall:call result:result];
+  } else {
+      result(FlutterMethodNotImplemented);
+  }
 }
 
 -(void)handleAuthCall:(FlutterMethodCall*)call result:(FlutterResult)result {
