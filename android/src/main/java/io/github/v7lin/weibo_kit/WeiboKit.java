@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +41,6 @@ public class WeiboKit implements MethodChannel.MethodCallHandler, PluginRegistry
         public static final int SHARE_IN_SDK_FAILED = -8;//分享失败 详情见response UserInfo
         public static final int UNSUPPORT = -99;//不支持的请求
         public static final int UNKNOWN = -100;
-        public static final int SSO_PKG_SIGN_ERROR = 21338;//sso package or sign error
     }
 
     private static final String METHOD_REGISTERAPP = "registerApp";
@@ -160,17 +158,9 @@ public class WeiboKit implements MethodChannel.MethodCallHandler, PluginRegistry
 
                 @Override
                 public void onError(UiError uiError) {
-                    // FIXME
-//                    if (TextUtils.equals(wbConnectErrorMessage.getErrorMessage(), "21338")) {
-//                        Map<String, Object> map = new HashMap<>();
-//                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.SSO_PKG_SIGN_ERROR);
-//                        map.put(ARGUMENT_KEY_RESULT_ERRORMESSAGE, wbConnectErrorMessage.getErrorCode());
-//                        channel.invokeMethod(METHOD_ONAUTHRESP, map);
-//                    } else {
-//                        Map<String, Object> map = new HashMap<>();
-//                        map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.UNKNOWN);
-//                        channel.invokeMethod(METHOD_ONAUTHRESP, map);
-//                    }
+                    Map<String, Object> map = new HashMap<>();
+                    map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.UNKNOWN);
+                    channel.invokeMethod(METHOD_ONAUTHRESP, map);
                 }
 
                 @Override

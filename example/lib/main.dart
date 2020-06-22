@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
                   );
                 }
                 image.Image thumbnail =
-                    image.decodeGif(saveFile.readAsBytesSync());
+                    image.decodePng(saveFile.readAsBytesSync());
                 Uint8List thumbData = thumbnail.getBytes();
                 if (thumbData.length > 32 * 1024) {
                   thumbData = Uint8List.fromList(image.encodeJpg(thumbnail,

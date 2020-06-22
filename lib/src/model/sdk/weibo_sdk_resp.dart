@@ -42,9 +42,6 @@ class WeiboSdkResp {
   /// 未知
   static const int UNKNOWN = -100;
 
-  /// sso package or sign error
-  static const int SSO_PKG_SIGN_ERROR = 21338;
-
   final int errorCode;
   final String errorMessage;
 
