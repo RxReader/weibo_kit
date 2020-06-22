@@ -37,18 +37,23 @@ class Weibo {
 
   static const String _SCHEME_FILE = 'file';
 
-  static const String _DEFAULT_REDIRECTURL = 'https://api.weibo.com/oauth2/default.html';
+  static const String _DEFAULT_REDIRECTURL =
+      'https://api.weibo.com/oauth2/default.html';
 
-  final MethodChannel _channel = const MethodChannel('v7lin.github.io/weibo_kit');
+  final MethodChannel _channel =
+      const MethodChannel('v7lin.github.io/weibo_kit');
 
-  final StreamController<WeiboAuthResp> _authRespStreamController = StreamController<WeiboAuthResp>.broadcast();
+  final StreamController<WeiboAuthResp> _authRespStreamController =
+      StreamController<WeiboAuthResp>.broadcast();
 
-  final StreamController<WeiboSdkResp> _shareMsgRespStreamController = StreamController<WeiboSdkResp>.broadcast();
+  final StreamController<WeiboSdkResp> _shareMsgRespStreamController =
+      StreamController<WeiboSdkResp>.broadcast();
 
   Future<void> registerApp({
     @required String appKey,
     @required List<String> scope,
-    String redirectUrl = _DEFAULT_REDIRECTURL, // 新浪微博开放平台 -> 我的应用 -> 应用信息 -> 高级信息 -> OAuth2.0授权设置
+    String redirectUrl =
+        _DEFAULT_REDIRECTURL, // 新浪微博开放平台 -> 我的应用 -> 应用信息 -> 高级信息 -> OAuth2.0授权设置
   }) {
     assert(appKey != null && appKey.isNotEmpty);
     assert(scope != null && scope.isNotEmpty);
@@ -65,10 +70,12 @@ class Weibo {
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case _METHOD_ONAUTHRESP:
-        _authRespStreamController.add(WeiboAuthResp.fromJson(call.arguments as Map<dynamic, dynamic>));
+        _authRespStreamController.add(
+            WeiboAuthResp.fromJson(call.arguments as Map<dynamic, dynamic>));
         break;
       case _METHOD_ONSHAREMSGRESP:
-        _shareMsgRespStreamController.add(WeiboSdkResp.fromJson(call.arguments as Map<dynamic, dynamic>));
+        _shareMsgRespStreamController.add(
+            WeiboSdkResp.fromJson(call.arguments as Map<dynamic, dynamic>));
         break;
     }
   }
@@ -116,14 +123,19 @@ class Weibo {
     Map<String, String> params = <String, String>{
       'uid': userId,
     };
-    return HttpClient().getUrl(_encodeUrl('https://api.weibo.com/2/users/show.json', appkey, accessToken, params)).then((HttpClientRequest request) {
+    return HttpClient()
+        .getUrl(_encodeUrl('https://api.weibo.com/2/users/show.json', appkey,
+            accessToken, params))
+        .then((HttpClientRequest request) {
       return request.close();
     }).then((HttpClientResponse response) async {
       if (response.statusCode == HttpStatus.ok) {
         String content = await utf8.decodeStream(response);
-        return WeiboUserInfoResp.fromJson(json.decode(content) as Map<dynamic, dynamic>);
+        return WeiboUserInfoResp.fromJson(
+            json.decode(content) as Map<dynamic, dynamic>);
       }
-      throw HttpException('HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
+      throw HttpException(
+          'HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
     });
   }
 
@@ -136,7 +148,8 @@ class Weibo {
     params['source'] = appkey;
     params['access_token'] = accessToken;
     Uri baseUri = Uri.parse(baseUrl);
-    Map<String, List<String>> queryParametersAll = Map<String, List<String>>.of(baseUri.queryParametersAll);
+    Map<String, List<String>> queryParametersAll =
+        Map<String, List<String>>.of(baseUri.queryParametersAll);
     for (MapEntry<String, String> entry in params.entries) {
       queryParametersAll.remove(entry.key);
       queryParametersAll.putIfAbsent(entry.key, () => <String>[entry.value]);
@@ -165,7 +178,10 @@ class Weibo {
   }) {
     assert(text == null || text.length <= 1024);
     assert((imageData != null && imageData.lengthInBytes <= 2 * 1024 * 1024) ||
-        (imageUri != null && imageUri.isScheme(_SCHEME_FILE) && imageUri.toFilePath().length <= 512 && File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
+        (imageUri != null &&
+            imageUri.isScheme(_SCHEME_FILE) &&
+            imageUri.toFilePath().length <= 512 &&
+            File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
     return _channel.invokeMethod<void>(
       _METHOD_SHAREIMAGE,
       <String, dynamic>{
@@ -184,9 +200,13 @@ class Weibo {
     @required String webpageUrl,
   }) {
     assert(title != null && title.isNotEmpty && title.length <= 512);
-    assert(description != null && description.isNotEmpty && description.length <= 1024);
+    assert(description != null &&
+        description.isNotEmpty &&
+        description.length <= 1024);
     assert(thumbData != null && thumbData.lengthInBytes <= 32 * 1024);
-    assert(webpageUrl != null && webpageUrl.isNotEmpty && webpageUrl.length <= 255);
+    assert(webpageUrl != null &&
+        webpageUrl.isNotEmpty &&
+        webpageUrl.length <= 255);
     return _channel.invokeMethod<void>(
       _METHOD_SHAREWEBPAGE,
       <String, dynamic>{

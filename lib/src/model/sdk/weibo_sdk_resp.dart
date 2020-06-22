@@ -12,7 +12,8 @@ class WeiboSdkResp {
     this.errorMessage,
   }) : errorCode = errorCode ?? SUCCESS;
 
-  factory WeiboSdkResp.fromJson(Map<dynamic, dynamic> json) => _$WeiboSdkRespFromJson(json);
+  factory WeiboSdkResp.fromJson(Map<dynamic, dynamic> json) =>
+      _$WeiboSdkRespFromJson(json);
 
   /// 成功
   static const int SUCCESS = 0;

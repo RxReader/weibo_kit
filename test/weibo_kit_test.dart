@@ -22,7 +22,8 @@ void main() {
         case 'auth':
           unawaited(channel.binaryMessenger.handlePlatformMessage(
             channel.name,
-            channel.codec.encodeMethodCall(MethodCall('onAuthResp', json.decode('{"errorCode":-1}'))),
+            channel.codec.encodeMethodCall(
+                MethodCall('onAuthResp', json.decode('{"errorCode":-1}'))),
             (ByteData data) {
               // mock success
             },
@@ -33,7 +34,8 @@ void main() {
         case 'shareWebpage':
           unawaited(channel.binaryMessenger.handlePlatformMessage(
             channel.name,
-            channel.codec.encodeMethodCall(MethodCall('onShareMsgResp', json.decode('{"errorCode":-1}'))),
+            channel.codec.encodeMethodCall(
+                MethodCall('onShareMsgResp', json.decode('{"errorCode":-1}'))),
             (ByteData data) {
               // mock success
             },
@@ -53,7 +55,8 @@ void main() {
   });
 
   test('auth', () async {
-    StreamSubscription<WeiboAuthResp> sub = weibo.authResp().listen((WeiboAuthResp resp) {
+    StreamSubscription<WeiboAuthResp> sub =
+        weibo.authResp().listen((WeiboAuthResp resp) {
       expect(resp.errorCode, WeiboSdkResp.USERCANCEL);
     });
     await weibo.auth(
@@ -64,7 +67,8 @@ void main() {
   });
 
   test('share', () async {
-    StreamSubscription<WeiboSdkResp> sub = weibo.shareMsgResp().listen((WeiboSdkResp resp) {
+    StreamSubscription<WeiboSdkResp> sub =
+        weibo.shareMsgResp().listen((WeiboSdkResp resp) {
       expect(resp.errorCode, WeiboSdkResp.USERCANCEL);
     });
     await weibo.shareText(

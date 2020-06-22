@@ -25,7 +25,8 @@ class WeiboUserInfoResp extends WeiboApiResp {
     this.avatarHd,
   }) : super(errorCode: errorCode, error: error, request: request);
 
-  factory WeiboUserInfoResp.fromJson(Map<dynamic, dynamic> json) => _$WeiboUserInfoRespFromJson(json);
+  factory WeiboUserInfoResp.fromJson(Map<dynamic, dynamic> json) =>
+      _$WeiboUserInfoRespFromJson(json);
 
   /// 用户UID（int64）
   final int id;

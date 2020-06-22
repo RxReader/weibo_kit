@@ -17,7 +17,8 @@ class WeiboAuthResp extends WeiboSdkResp {
     this.expiresIn,
   }) : super(errorCode: errorCode, errorMessage: errorMessage);
 
-  factory WeiboAuthResp.fromJson(Map<dynamic, dynamic> json) => _$WeiboAuthRespFromJson(json);
+  factory WeiboAuthResp.fromJson(Map<dynamic, dynamic> json) =>
+      _$WeiboAuthRespFromJson(json);
 
   final String userId;
   final String accessToken;
