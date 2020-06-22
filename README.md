@@ -1,9 +1,9 @@
-# fake_weibo
+# weibo_kit
 
 [![Build Status](https://cloud.drone.io/api/badges/v7lin/fake_weibo/status.svg)](https://cloud.drone.io/v7lin/fake_weibo)
 [![Codecov](https://codecov.io/gh/v7lin/fake_weibo/branch/master/graph/badge.svg)](https://codecov.io/gh/v7lin/fake_weibo)
 [![GitHub Tag](https://img.shields.io/github/tag/v7lin/fake_weibo.svg)](https://github.com/v7lin/fake_weibo/releases)
-[![Pub Package](https://img.shields.io/pub/v/fake_weibo.svg)](https://pub.dartlang.org/packages/fake_weibo)
+[![Pub Package](https://img.shields.io/pub/v/weibo_kit.svg)](https://pub.dartlang.org/packages/weibo_kit)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/v7lin/fake_weibo/blob/master/LICENSE)
 
 flutter版新浪微博SDK
@@ -14,6 +14,7 @@ flutter版新浪微博SDK
 * [flutter版腾讯(QQ)SDK](https://github.com/v7lin/fake_tencent)
 * [flutter版新浪微博SDK](https://github.com/v7lin/fake_weibo)
 * [flutter版支付宝SDK](https://github.com/v7lin/fake_alipay)
+* [flutter版walle渠道打包工具](https://github.com/v7lin/walle_kit)
 * [flutter版腾讯(信鸽)推送SDK](https://github.com/v7lin/fake_push)
 * [flutter版talkingdata移动统计SDK](https://github.com/v7lin/fake_analytics)
 
@@ -35,6 +36,26 @@ flutter版新浪微博SDK
 # 混淆已打入 Library，随 Library 引用，自动添加到 apk 打包混淆
 ```
 
+#### 获取 android 微信签名信息
+
+非官方方法 -> 反编译 app_signatures.apk 所得
+
+命令：
+
+```shell
+keytool -list -v -keystore ${your_keystore_path} -storepass ${your_keystore_password} 2>/dev/null | grep -p 'MD5:.*' -o | sed 's/MD5://' | sed 's/ //g' | sed 's/://g' | awk '{print tolower($0)}'
+```
+
+示例：
+
+```shell
+keytool -list -v -keystore example/android/app/infos/dev.jks -storepass 123456 2>/dev/null | grep -p 'MD5:.*' -o | sed 's/MD5://' | sed 's/ //g' | sed 's/://g' | awk '{print tolower($0)}'
+```
+
+```shell
+28424130a4416d519e00946651d53a46
+```
+
 ## ios
 
 ```
@@ -45,7 +66,7 @@ iOS 9.0
 在Xcode中，选择你的工程设置项，选中“TARGETS”一栏，在“info”标签栏的“URL type“添加“URL scheme”为你所注册的应用程序id
 
 URL Types
-weibosdk: identifier=com.weibo schemes=wb${appKey}
+weibosdk: identifier=weibo schemes=wb${appKey}
 ```
 
 ```
@@ -63,6 +84,61 @@ iOS 9系统策略更新，限制了http协议的访问，此外应用需要在�
     <true/>
     <key>NSExceptionDomains</key>
     <dict>
+        <key>sina.cn</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>weibo.cn</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>weibo.com</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>sinaimg.cn</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>sinajs.cn</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
         <key>sina.com.cn</key>
         <dict>
             <key>NSIncludesSubdomains</key>
@@ -83,7 +159,7 @@ iOS 9系统策略更新，限制了http协议的访问，此外应用需要在�
 
 ```
 dependencies:
-  fake_weibo:
+  weibo_kit:
     git:
       url: https://github.com/v7lin/fake_weibo.git
 ```
@@ -92,7 +168,7 @@ dependencies:
 
 ```
 dependencies:
-  fake_weibo: ^${latestTag}
+  weibo_kit: ^${latestTag}
 ```
 
 * example
@@ -102,10 +178,10 @@ dependencies:
 ## Getting Started
 
 This project is a starting point for a Flutter
-[plug-in package](https://flutter.io/developing-packages/),
+[plug-in package](https://flutter.dev/developing-packages/),
 a specialized package that includes platform-specific implementation code for
 Android and/or iOS.
 
 For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
+[online documentation](https://flutter.dev/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.

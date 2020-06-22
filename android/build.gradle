@@ -1,5 +1,5 @@
-group 'io.github.v7lin.fakeweibo'
-version '1.0-SNAPSHOT'
+group 'io.github.v7lin.weibo_kit'
+version '1.0.0'
 
 buildscript {
     repositories {
@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
     }
 }
 
@@ -19,12 +19,13 @@ rootProject.allprojects {
 
         // weibo
         maven {
-            url "https://dl.bintray.com/thelasterstar/maven/"
+            url 'https://dl.bintray.com/thelasterstar/maven/'
         }
     }
 }
 
 apply plugin: 'com.android.library'
+apply from: './quality.gradle'
 
 android {
     compileSdkVersion 28
@@ -33,9 +34,7 @@ android {
         minSdkVersion 16
 
         // library 混淆 -> 随 library 引用，自动添加到 apk 打包混淆
-        consumerProguardFiles 'consumer-proguard-rules.txt'
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
     }
 
     lintOptions {
@@ -44,5 +43,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.sina.weibo.sdk:core:4.3.4:openDefaultRelease@aar'
+    implementation 'androidx.annotation:annotation:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
 }

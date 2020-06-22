@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:fake_weibo/src/domain/api/weibo_user_info_resp.dart';
-import 'package:fake_weibo/src/domain/sdk/weibo_auth_resp.dart';
-import 'package:fake_weibo/src/domain/sdk/weibo_sdk_resp.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
+import 'package:weibo_kit/src/model/api/weibo_user_info_resp.dart';
+import 'package:weibo_kit/src/model/sdk/weibo_auth_resp.dart';
+import 'package:weibo_kit/src/model/sdk/weibo_sdk_resp.dart';
 
 class Weibo {
   Weibo() {
@@ -15,7 +15,7 @@ class Weibo {
   }
 
   static const String _METHOD_REGISTERAPP = 'registerApp';
-  static const String _METHOD_ISWEIBOINSTALLED = 'isWeiboInstalled';
+  static const String _METHOD_ISINSTALLED = 'isInstalled';
   static const String _METHOD_AUTH = 'auth';
   static const String _METHOD_SHARETEXT = 'shareText';
   static const String _METHOD_SHAREIMAGE = 'shareImage';
@@ -41,7 +41,7 @@ class Weibo {
       'https://api.weibo.com/oauth2/default.html';
 
   final MethodChannel _channel =
-      const MethodChannel('v7lin.github.io/fake_weibo');
+      const MethodChannel('v7lin.github.io/weibo_kit');
 
   final StreamController<WeiboAuthResp> _authRespStreamController =
       StreamController<WeiboAuthResp>.broadcast();
@@ -57,7 +57,7 @@ class Weibo {
   }) {
     assert(appKey != null && appKey.isNotEmpty);
     assert(scope != null && scope.isNotEmpty);
-    return _channel.invokeMethod(
+    return _channel.invokeMethod<void>(
       _METHOD_REGISTERAPP,
       <String, dynamic>{
         _ARGUMENT_KEY_APPKEY: appKey,
@@ -70,12 +70,12 @@ class Weibo {
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case _METHOD_ONAUTHRESP:
-        _authRespStreamController.add(WeiboAuthRespSerializer()
-            .fromMap(call.arguments as Map<dynamic, dynamic>));
+        _authRespStreamController.add(
+            WeiboAuthResp.fromJson(call.arguments as Map<dynamic, dynamic>));
         break;
       case _METHOD_ONSHAREMSGRESP:
-        _shareMsgRespStreamController.add(WeiboSdkRespSerializer()
-            .fromMap(call.arguments as Map<dynamic, dynamic>));
+        _shareMsgRespStreamController.add(
+            WeiboSdkResp.fromJson(call.arguments as Map<dynamic, dynamic>));
         break;
     }
   }
@@ -90,8 +90,8 @@ class Weibo {
     return _shareMsgRespStreamController.stream;
   }
 
-  Future<bool> isWeiboInstalled() async {
-    return (await _channel.invokeMethod(_METHOD_ISWEIBOINSTALLED)) as bool;
+  Future<bool> isInstalled() {
+    return _channel.invokeMethod<bool>(_METHOD_ISINSTALLED);
   }
 
   /// 登录
@@ -102,7 +102,7 @@ class Weibo {
   }) {
     assert(appKey != null && appKey.isNotEmpty);
     assert(scope != null && scope.isNotEmpty);
-    return _channel.invokeMethod(
+    return _channel.invokeMethod<void>(
       _METHOD_AUTH,
       <String, dynamic>{
         _ARGUMENT_KEY_APPKEY: appKey,
@@ -131,8 +131,8 @@ class Weibo {
     }).then((HttpClientResponse response) async {
       if (response.statusCode == HttpStatus.ok) {
         String content = await utf8.decodeStream(response);
-        return WeiboUserInfoRespSerializer()
-            .fromMap(json.decode(content) as Map<dynamic, dynamic>);
+        return WeiboUserInfoResp.fromJson(
+            json.decode(content) as Map<dynamic, dynamic>);
       }
       throw HttpException(
           'HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
@@ -145,15 +145,15 @@ class Weibo {
     String accessToken,
     Map<String, String> params,
   ) {
-    params.putIfAbsent('source', () => appkey);
-    params.putIfAbsent('access_token', () => accessToken);
+    params['source'] = appkey;
+    params['access_token'] = accessToken;
     Uri baseUri = Uri.parse(baseUrl);
     Map<String, List<String>> queryParametersAll =
         Map<String, List<String>>.of(baseUri.queryParametersAll);
-    params.forEach((String key, String value) {
-      queryParametersAll.remove(key);
-      queryParametersAll.putIfAbsent(key, () => <String>[value]);
-    });
+    for (MapEntry<String, String> entry in params.entries) {
+      queryParametersAll.remove(entry.key);
+      queryParametersAll.putIfAbsent(entry.key, () => <String>[entry.value]);
+    }
     return baseUri.replace(queryParameters: queryParametersAll);
   }
 
@@ -162,7 +162,7 @@ class Weibo {
     @required String text,
   }) {
     assert(text != null && text.length <= 1024);
-    return _channel.invokeMethod(
+    return _channel.invokeMethod<void>(
       _METHOD_SHARETEXT,
       <String, dynamic>{
         _ARGUMENT_KEY_TEXT: text,
@@ -182,17 +182,14 @@ class Weibo {
             imageUri.isScheme(_SCHEME_FILE) &&
             imageUri.toFilePath().length <= 512 &&
             File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
-    Map<String, dynamic> map = <String, dynamic>{};
-    if (text != null && text.isNotEmpty) {
-      map.putIfAbsent(_ARGUMENT_KEY_TEXT, () => text);
-    }
-    if (imageData != null) {
-      map.putIfAbsent(_ARGUMENT_KEY_IMAGEDATA, () => imageData);
-    }
-    if (imageUri != null) {
-      map.putIfAbsent(_ARGUMENT_KEY_IMAGEURI, () => imageUri.toString());
-    }
-    return _channel.invokeMethod(_METHOD_SHAREIMAGE, map);
+    return _channel.invokeMethod<void>(
+      _METHOD_SHAREIMAGE,
+      <String, dynamic>{
+        if (text != null && text.isNotEmpty) _ARGUMENT_KEY_TEXT: text,
+        if (imageData != null) _ARGUMENT_KEY_IMAGEDATA: imageData,
+        if (imageUri != null) _ARGUMENT_KEY_IMAGEURI: imageUri.toString(),
+      },
+    );
   }
 
   /// 分享 - 网页
@@ -210,7 +207,7 @@ class Weibo {
     assert(webpageUrl != null &&
         webpageUrl.isNotEmpty &&
         webpageUrl.length <= 255);
-    return _channel.invokeMethod(
+    return _channel.invokeMethod<void>(
       _METHOD_SHAREWEBPAGE,
       <String, dynamic>{
         _ARGUMENT_KEY_TITLE: title,

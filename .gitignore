@@ -3,9 +3,9 @@
 
 .packages
 .pub/
-pubspec.lock
 
 build/
 
+# custom
 .idea/
 *.iml

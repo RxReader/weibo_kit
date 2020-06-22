@@ -1,16 +1,19 @@
-import 'package:jaguar_serializer/jaguar_serializer.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'weibo_sdk_resp.jser.dart';
+part 'weibo_sdk_resp.g.dart';
 
-@GenSerializer()
-class WeiboSdkRespSerializer extends Serializer<WeiboSdkResp>
-    with _$WeiboSdkRespSerializer {}
-
+@JsonSerializable(
+  anyMap: true,
+  explicitToJson: true,
+)
 class WeiboSdkResp {
   WeiboSdkResp({
     int errorCode,
     this.errorMessage,
   }) : errorCode = errorCode ?? SUCCESS;
+
+  factory WeiboSdkResp.fromJson(Map<dynamic, dynamic> json) =>
+      _$WeiboSdkRespFromJson(json);
 
   /// 成功
   static const int SUCCESS = 0;
@@ -39,9 +42,8 @@ class WeiboSdkResp {
   /// 未知
   static const int UNKNOWN = -100;
 
-  /// sso package or sign error
-  static const int SSO_PKG_SIGN_ERROR = 21338;
-
   final int errorCode;
   final String errorMessage;
+
+  Map<dynamic, dynamic> toJson() => _$WeiboSdkRespToJson(this);
 }
