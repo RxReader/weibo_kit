@@ -4,10 +4,10 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'weibo_kit'
-  s.version          = '1.0.0'
-  s.summary          = 'A powerful weibo plugin for Flutter.'
+  s.version          = '1.0.1'
+  s.summary          = 'A powerful Flutter plugin allowing developers to auth/share with natvie Android & iOS Weibo SDKs.'
   s.description      = <<-DESC
-A powerful weibo plugin for Flutter.
+A powerful Flutter plugin allowing developers to auth/share with natvie Android & iOS Weibo SDKs.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
