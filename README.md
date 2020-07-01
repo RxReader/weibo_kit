@@ -1,22 +1,20 @@
 # weibo_kit
 
-[![Build Status](https://cloud.drone.io/api/badges/v7lin/fake_weibo/status.svg)](https://cloud.drone.io/v7lin/fake_weibo)
-[![Codecov](https://codecov.io/gh/v7lin/fake_weibo/branch/master/graph/badge.svg)](https://codecov.io/gh/v7lin/fake_weibo)
-[![GitHub Tag](https://img.shields.io/github/tag/v7lin/fake_weibo.svg)](https://github.com/v7lin/fake_weibo/releases)
+[![Build Status](https://cloud.drone.io/api/badges/v7lin/weibo_kit/status.svg)](https://cloud.drone.io/v7lin/weibo_kit)
+[![Codecov](https://codecov.io/gh/v7lin/weibo_kit/branch/master/graph/badge.svg)](https://codecov.io/gh/v7lin/weibo_kit)
+[![GitHub Tag](https://img.shields.io/github/tag/v7lin/weibo_kit.svg)](https://github.com/v7lin/weibo_kit/releases)
 [![Pub Package](https://img.shields.io/pub/v/weibo_kit.svg)](https://pub.dartlang.org/packages/weibo_kit)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/v7lin/fake_weibo/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/v7lin/weibo_kit/blob/master/LICENSE)
 
 flutter版新浪微博SDK
 
 ## fake 系列 libraries
 
-* [flutter版微信SDK](https://github.com/v7lin/fake_wechat)
-* [flutter版腾讯(QQ)SDK](https://github.com/v7lin/fake_tencent)
-* [flutter版新浪微博SDK](https://github.com/v7lin/fake_weibo)
-* [flutter版支付宝SDK](https://github.com/v7lin/fake_alipay)
+* [flutter版微信SDK](https://github.com/v7lin/wechat_kit)
+* [flutter版腾讯(QQ)SDK](https://github.com/v7lin/tencent_kit)
+* [flutter版新浪微博SDK](https://github.com/v7lin/weibo_kit)
+* [flutter版支付宝SDK](https://github.com/v7lin/alipay_kit)
 * [flutter版walle渠道打包工具](https://github.com/v7lin/walle_kit)
-* [flutter版腾讯(信鸽)推送SDK](https://github.com/v7lin/fake_push)
-* [flutter版talkingdata移动统计SDK](https://github.com/v7lin/fake_analytics)
 
 ## dart/flutter 私服
 
@@ -161,7 +159,7 @@ iOS 9系统策略更新，限制了http协议的访问，此外应用需要在�
 dependencies:
   weibo_kit:
     git:
-      url: https://github.com/v7lin/fake_weibo.git
+      url: https://github.com/v7lin/weibo_kit.git
 ```
 
 * release
