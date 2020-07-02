@@ -17,7 +17,8 @@ A powerful Flutter plugin allowing developers to auth/share with natvie Android 
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
-  
+
+  # v3.2.7
   s.static_framework = true
   s.subspec 'vendor' do |sp|
     sp.dependency 'Weibo_SDK', '~> 3.2.7'
