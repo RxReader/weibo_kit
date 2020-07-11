@@ -43,9 +43,9 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-    weiboKit.setApplicationContext(null);
-    weiboKit.setActivity(null);
     weiboKit.stopListening();
+    weiboKit.setActivity(null);
+    weiboKit.setApplicationContext(null);
   }
 
   // --- ActivityAware

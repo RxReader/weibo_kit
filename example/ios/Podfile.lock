@@ -6,10 +6,10 @@ PODS:
     - Flutter
   - path_provider_macos (0.0.1):
     - Flutter
-  - weibo_kit (1.0.1):
+  - weibo_kit (1.1.0):
     - Flutter
-    - weibo_kit/vendor (= 1.0.1)
-  - weibo_kit/vendor (1.0.1):
+    - weibo_kit/vendor (= 1.1.0)
+  - weibo_kit/vendor (1.1.0):
     - Flutter
     - Weibo_SDK (~> 3.2.7)
   - Weibo_SDK (3.2.7)
@@ -42,7 +42,7 @@ SPEC CHECKSUMS:
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
-  weibo_kit: 70328c34abff8f1407ea6268567adecd694fae37
+  weibo_kit: 82a3b5501bbe2ae59528e683a80277079ecc95cb
   Weibo_SDK: 5a4d08f7e1fedbb635435e4585c8c0439c7da089
 
 PODFILE CHECKSUM: f32fb4e7c14f8b3ca19a369d7be425dd9241af27
