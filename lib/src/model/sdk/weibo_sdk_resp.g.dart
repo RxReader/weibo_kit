@@ -6,10 +6,10 @@ part of 'weibo_sdk_resp.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WeiboSdkResp _$WeiboSdkRespFromJson(Map json) {
+WeiboSdkResp _$WeiboSdkRespFromJson(Map<String, dynamic> json) {
   return WeiboSdkResp(
-    errorCode: json['errorCode'] as int,
-    errorMessage: json['errorMessage'] as String,
+    errorCode: json['errorCode'] as int? ?? 0,
+    errorMessage: json['errorMessage'] as String?,
   );
 }
 

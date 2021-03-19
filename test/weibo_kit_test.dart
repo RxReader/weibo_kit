@@ -10,7 +10,6 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   const MethodChannel channel = MethodChannel('v7lin.github.io/weibo_kit');
-  final Weibo weibo = Weibo();
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall call) async {
@@ -24,7 +23,7 @@ void main() {
             channel.name,
             channel.codec.encodeMethodCall(
                 MethodCall('onAuthResp', json.decode('{"errorCode":-1}'))),
-            (ByteData data) {
+            (ByteData? data) {
               // mock success
             },
           ));
@@ -36,7 +35,7 @@ void main() {
             channel.name,
             channel.codec.encodeMethodCall(
                 MethodCall('onShareMsgResp', json.decode('{"errorCode":-1}'))),
-            (ByteData data) {
+            (ByteData? data) {
               // mock success
             },
           ));
@@ -51,15 +50,15 @@ void main() {
   });
 
   test('isInstalled', () async {
-    expect(await weibo.isInstalled(), true);
+    expect(await Weibo.instance.isInstalled(), true);
   });
 
   test('auth', () async {
-    StreamSubscription<WeiboAuthResp> sub =
-        weibo.authResp().listen((WeiboAuthResp resp) {
+    final StreamSubscription<WeiboAuthResp> sub =
+        Weibo.instance.authResp().listen((WeiboAuthResp resp) {
       expect(resp.errorCode, WeiboSdkResp.USERCANCEL);
     });
-    await weibo.auth(
+    await Weibo.instance.auth(
       appKey: 'your weibo app key',
       scope: <String>[WeiboScope.ALL],
     );
@@ -67,11 +66,11 @@ void main() {
   });
 
   test('share', () async {
-    StreamSubscription<WeiboSdkResp> sub =
-        weibo.shareMsgResp().listen((WeiboSdkResp resp) {
+    final StreamSubscription<WeiboSdkResp> sub =
+        Weibo.instance.shareMsgResp().listen((WeiboSdkResp resp) {
       expect(resp.errorCode, WeiboSdkResp.USERCANCEL);
     });
-    await weibo.shareText(
+    await Weibo.instance.shareText(
       text: 'share text',
     );
     await sub.cancel();

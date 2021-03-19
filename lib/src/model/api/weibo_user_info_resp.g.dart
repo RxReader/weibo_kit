@@ -6,21 +6,21 @@ part of 'weibo_user_info_resp.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WeiboUserInfoResp _$WeiboUserInfoRespFromJson(Map json) {
+WeiboUserInfoResp _$WeiboUserInfoRespFromJson(Map<String, dynamic> json) {
   return WeiboUserInfoResp(
-    errorCode: json['error_code'] as int,
-    error: json['error'] as String,
-    request: json['request'] as String,
-    id: json['id'] as int,
-    idstr: json['idstr'] as String,
-    screenName: json['screen_name'] as String,
-    name: json['name'] as String,
-    location: json['location'] as String,
-    description: json['description'] as String,
-    profileImageUrl: json['profile_image_url'] as String,
-    gender: json['gender'] as String,
-    avatarLarge: json['avatar_large'] as String,
-    avatarHd: json['avatar_hd'] as String,
+    errorCode: json['error_code'] as int? ?? 0,
+    error: json['error'] as String?,
+    request: json['request'] as String?,
+    id: json['id'] as int?,
+    idstr: json['idstr'] as String?,
+    screenName: json['screen_name'] as String?,
+    name: json['name'] as String?,
+    location: json['location'] as String?,
+    description: json['description'] as String?,
+    profileImageUrl: json['profile_image_url'] as String?,
+    gender: json['gender'] as String?,
+    avatarLarge: json['avatar_large'] as String?,
+    avatarHd: json['avatar_hd'] as String?,
   );
 }
 

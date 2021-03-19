@@ -1,3 +1,9 @@
+## 2.0.0
+
+* nullsafety
+* 不再支持 Android embedding v1
+* Weibo 单例
+
 ## 1.1.0
 
 * 优化

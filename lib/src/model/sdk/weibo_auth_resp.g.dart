@@ -6,14 +6,14 @@ part of 'weibo_auth_resp.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WeiboAuthResp _$WeiboAuthRespFromJson(Map json) {
+WeiboAuthResp _$WeiboAuthRespFromJson(Map<String, dynamic> json) {
   return WeiboAuthResp(
-    errorCode: json['errorCode'] as int,
-    errorMessage: json['errorMessage'] as String,
-    userId: json['userId'] as String,
-    accessToken: json['accessToken'] as String,
-    refreshToken: json['refreshToken'] as String,
-    expiresIn: json['expiresIn'] as int,
+    errorCode: json['errorCode'] as int? ?? 0,
+    errorMessage: json['errorMessage'] as String?,
+    userId: json['userId'] as String?,
+    accessToken: json['accessToken'] as String?,
+    refreshToken: json['refreshToken'] as String?,
+    expiresIn: json['expiresIn'] as int?,
   );
 }
 

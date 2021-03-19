@@ -3,16 +3,15 @@ import 'package:json_annotation/json_annotation.dart';
 part 'weibo_sdk_resp.g.dart';
 
 @JsonSerializable(
-  anyMap: true,
   explicitToJson: true,
 )
 class WeiboSdkResp {
-  WeiboSdkResp({
-    int errorCode,
+  const WeiboSdkResp({
+    required this.errorCode,
     this.errorMessage,
-  }) : errorCode = errorCode ?? SUCCESS;
+  });
 
-  factory WeiboSdkResp.fromJson(Map<dynamic, dynamic> json) =>
+  factory WeiboSdkResp.fromJson(Map<String, dynamic> json) =>
       _$WeiboSdkRespFromJson(json);
 
   /// 成功
@@ -42,8 +41,15 @@ class WeiboSdkResp {
   /// 未知
   static const int UNKNOWN = -100;
 
+  @JsonKey(
+    defaultValue: SUCCESS,
+  )
   final int errorCode;
-  final String errorMessage;
+  final String? errorMessage;
 
-  Map<dynamic, dynamic> toJson() => _$WeiboSdkRespToJson(this);
+  bool get isSuccessful => errorCode == SUCCESS;
+
+  bool get isCancelled => errorCode == USERCANCEL;
+
+  Map<String, dynamic> toJson() => _$WeiboSdkRespToJson(this);
 }

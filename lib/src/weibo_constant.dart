@@ -1,5 +1,5 @@
 class WeiboScope {
-  WeiboScope._();
+  const WeiboScope._();
 
   static const String EMAIL = 'email';
   static const String DIRECT_MESSAGES_READ = 'direct_messages_read';
