@@ -223,7 +223,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
                     Map<String, Object> map = new HashMap<>();
                     map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.UNKNOWN);
                     if (channel != null) {
-                      channel.invokeMethod(METHOD_ONAUTHRESP, map);
+                        channel.invokeMethod(METHOD_ONAUTHRESP, map);
                     }
                 }
 
