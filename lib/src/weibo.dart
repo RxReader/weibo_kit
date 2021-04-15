@@ -71,12 +71,12 @@ class Weibo {
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case _METHOD_ONAUTHRESP:
-        _authRespStreamController.add(
-            WeiboAuthResp.fromJson(call.arguments as Map<String, dynamic>));
+        _authRespStreamController.add(WeiboAuthResp.fromJson(
+            (call.arguments as Map<String, dynamic>).cast<String, dynamic>()));
         break;
       case _METHOD_ONSHAREMSGRESP:
-        _shareMsgRespStreamController
-            .add(WeiboSdkResp.fromJson(call.arguments as Map<String, dynamic>));
+        _shareMsgRespStreamController.add(WeiboSdkResp.fromJson(
+            (call.arguments as Map<String, dynamic>).cast<String, dynamic>()));
         break;
     }
   }
@@ -129,7 +129,8 @@ class Weibo {
       if (response.statusCode == HttpStatus.ok) {
         final String content = await utf8.decodeStream(response);
         return WeiboUserInfoResp.fromJson(
-            json.decode(content) as Map<String, dynamic>);
+            (json.decode(content) as Map<String, dynamic>)
+                .cast<String, dynamic>());
       }
       throw HttpException(
           'HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
