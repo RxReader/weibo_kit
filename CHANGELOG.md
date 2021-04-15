@@ -1,3 +1,7 @@
+## 2.0.1
+
+* bugfix
+
 ## 2.0.0
 
 * nullsafety
