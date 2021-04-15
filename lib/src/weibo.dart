@@ -72,11 +72,11 @@ class Weibo {
     switch (call.method) {
       case _METHOD_ONAUTHRESP:
         _authRespStreamController.add(WeiboAuthResp.fromJson(
-            (call.arguments as Map<String, dynamic>).cast<String, dynamic>()));
+            (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
       case _METHOD_ONSHAREMSGRESP:
         _shareMsgRespStreamController.add(WeiboSdkResp.fromJson(
-            (call.arguments as Map<String, dynamic>).cast<String, dynamic>()));
+            (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
     }
   }
@@ -129,7 +129,7 @@ class Weibo {
       if (response.statusCode == HttpStatus.ok) {
         final String content = await utf8.decodeStream(response);
         return WeiboUserInfoResp.fromJson(
-            (json.decode(content) as Map<String, dynamic>)
+            (json.decode(content) as Map<dynamic, dynamic>)
                 .cast<String, dynamic>());
       }
       throw HttpException(
