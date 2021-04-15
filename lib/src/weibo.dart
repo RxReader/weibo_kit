@@ -129,8 +129,7 @@ class Weibo {
       if (response.statusCode == HttpStatus.ok) {
         final String content = await utf8.decodeStream(response);
         return WeiboUserInfoResp.fromJson(
-            (json.decode(content) as Map<dynamic, dynamic>)
-                .cast<String, dynamic>());
+            json.decode(content) as Map<String, dynamic>);
       }
       throw HttpException(
           'HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
