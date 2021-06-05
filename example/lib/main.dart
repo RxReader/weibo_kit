@@ -8,6 +8,7 @@ import 'package:image/image.dart' as image;
 import 'package:weibo_kit/weibo_kit.dart';
 
 const String _WEIBO_APP_KEY = 'your weibo app key';
+const String _WEIBO_UNIVERSAL_LINK = 'your weibo universal link';
 const List<String> _WEIBO_SCOPE = <String>[
   WeiboScope.ALL,
 ];
@@ -16,6 +17,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Weibo.instance.registerApp(
     appKey: _WEIBO_APP_KEY,
+    universalLink: _WEIBO_UNIVERSAL_LINK,
     scope: _WEIBO_SCOPE,
   );
   runApp(MyApp());

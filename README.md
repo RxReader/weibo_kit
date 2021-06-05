@@ -24,6 +24,7 @@ flutter版新浪微博SDK
 * [iOS 应用接入](https://open.weibo.com/wiki/Sdk/ios)
 * [Android Github](https://github.com/sinaweibosdk/weibo_android_sdk)
 * [iOS Github](https://github.com/sinaweibosdk/weibo_ios_sdk)
+* [Universal Links](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content)
 
 ## android
 

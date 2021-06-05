@@ -29,6 +29,7 @@ static NSString *const METHOD_ONAUTHRESP = @"onAuthResp";
 static NSString *const METHOD_ONSHAREMSGRESP = @"onShareMsgResp";
 
 static NSString *const ARGUMENT_KEY_APPKEY = @"appKey";
+static NSString *const ARGUMENT_KEY_UNIVERSALLINK = @"universalLink";
 static NSString *const ARGUMENT_KEY_SCOPE = @"scope";
 static NSString *const ARGUMENT_KEY_REDIRECTURL = @"redirectUrl";
 static NSString *const ARGUMENT_KEY_TEXT = @"text";
@@ -58,7 +59,8 @@ static NSString *const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
                   result:(FlutterResult)result {
     if ([METHOD_REGISTERAPP isEqualToString:call.method]) {
         NSString *appKey = call.arguments[ARGUMENT_KEY_APPKEY];
-        [WeiboSDK registerApp:appKey];
+        NSString *universalLink = call.arguments[ARGUMENT_KEY_UNIVERSALLINK];
+        [WeiboSDK registerApp:appKey universalLink:universalLink];
         result(nil);
     } else if ([METHOD_ISINSTALLED isEqualToString:call.method]) {
         result([NSNumber numberWithBool:[WeiboSDK isWeiboAppInstalled]]);
@@ -80,7 +82,9 @@ static NSString *const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
     request.redirectURI = call.arguments[ARGUMENT_KEY_REDIRECTURL];
     request.shouldShowWebViewForAuthIfCannotSSO = YES;
     request.shouldOpenWeiboAppInstallPageIfNotInstalled = NO;
-    [WeiboSDK sendRequest:request];
+    [WeiboSDK sendRequest:request completion:^(BOOL success) {
+        // do nothing
+    }];
     result(nil);
 }
 
@@ -89,7 +93,9 @@ static NSString *const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
     WBMessageObject *message = [WBMessageObject message];
     message.text = call.arguments[ARGUMENT_KEY_TEXT];
     request.message = message;
-    [WeiboSDK sendRequest:request];
+    [WeiboSDK sendRequest:request completion:^(BOOL success) {
+        // do nothing
+    }];
     result(nil);
 }
 
@@ -121,7 +127,9 @@ static NSString *const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
         message.mediaObject = object;
     }
     request.message = message;
-    [WeiboSDK sendRequest:request];
+    [WeiboSDK sendRequest:request completion:^(BOOL success) {
+        // do nothing
+    }];
     result(nil);
 }
 

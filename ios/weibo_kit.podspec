@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'weibo_kit'
-  s.version          = '2.0.1'
+  s.version          = '2.0.2'
   s.summary          = 'A powerful Flutter plugin allowing developers to auth/share with natvie Android & iOS Weibo SDKs.'
   s.description      = <<-DESC
 A powerful Flutter plugin allowing developers to auth/share with natvie Android & iOS Weibo SDKs.
@@ -18,10 +18,10 @@ A powerful Flutter plugin allowing developers to auth/share with natvie Android 
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
 
-  # v3.2.7
+  # v3.3.0
   s.static_framework = true
   s.subspec 'vendor' do |sp|
-    sp.dependency 'Weibo_SDK', '~> 3.2.7'
+    sp.dependency 'Weibo_SDK', '~> 3.3.0'
   end
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.

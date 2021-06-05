@@ -27,6 +27,7 @@ class Weibo {
   static const String _METHOD_ONSHAREMSGRESP = 'onShareMsgResp';
 
   static const String _ARGUMENT_KEY_APPKEY = 'appKey';
+  static const String _ARGUMENT_KEY_UNIVERSALLINK = 'universalLink';
   static const String _ARGUMENT_KEY_SCOPE = 'scope';
   static const String _ARGUMENT_KEY_REDIRECTURL = 'redirectUrl';
   static const String _ARGUMENT_KEY_TEXT = 'text';
@@ -54,14 +55,17 @@ class Weibo {
 
   Future<void> registerApp({
     required String appKey,
+    required String? universalLink,
     required List<String> scope,
     String redirectUrl =
         _DEFAULT_REDIRECTURL, // 新浪微博开放平台 -> 我的应用 -> 应用信息 -> 高级信息 -> OAuth2.0授权设置
   }) {
+    assert(!Platform.isIOS || (universalLink?.isNotEmpty ?? false));
     return _channel.invokeMethod<void>(
       _METHOD_REGISTERAPP,
       <String, dynamic>{
         _ARGUMENT_KEY_APPKEY: appKey,
+        _ARGUMENT_KEY_UNIVERSALLINK: universalLink,
         _ARGUMENT_KEY_SCOPE: scope.join(','),
         _ARGUMENT_KEY_REDIRECTURL: redirectUrl,
       },
@@ -189,6 +193,7 @@ class Weibo {
   }
 
   /// 分享 - 网页
+  @Deprecated('iOS：分享多媒体已经弃用 请不要用相关api')
   Future<void> shareWebpage({
     required String title,
     required String description,

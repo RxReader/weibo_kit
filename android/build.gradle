@@ -1,5 +1,5 @@
 group 'io.github.v7lin.weibo_kit'
-version '2.0.1'
+version '2.0.2'
 
 buildscript {
     repositories {
@@ -17,9 +17,9 @@ rootProject.allprojects {
         google()
         jcenter()
 
-        // weibo
-        maven {
-            url 'https://dl.bintray.com/thelasterstar/maven/'
+        // 私仓
+        flatDir {
+            dirs project(':weibo_kit').file('libs')
         }
     }
 }
@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-    // v9.12.0
+    // v10.10.0
     vendorImplementation 'androidx.appcompat:appcompat:1.0.0'
-    vendorImplementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
+    vendorImplementation(name: 'openDefault-10.10.0', ext: 'aar')
 }
