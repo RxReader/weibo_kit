@@ -147,6 +147,10 @@ static NSString *const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
     return [WeiboSDK handleOpenURL:url delegate:self];
 }
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nonnull))restorationHandler {
+    return [WeiboSDK handleOpenUniversalLink:userActivity delegate:self];;
+}
+
 #pragma mark - WeiboSDKDelegate
 
 - (void)didReceiveWeiboRequest:(WBBaseRequest *)request {
