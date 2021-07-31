@@ -3,8 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-import 'package:weibo_kit/src/model/weibo_auth_resp.dart';
-import 'package:weibo_kit/src/model/weibo_sdk_resp.dart';
+import 'package:weibo_kit/src/model/resp.dart';
 
 class Weibo {
   ///
@@ -45,11 +44,8 @@ class Weibo {
       const MethodChannel('v7lin.github.io/weibo_kit')
         ..setMethodCallHandler(_handleMethod);
 
-  final StreamController<WeiboAuthResp> _authRespStreamController =
-      StreamController<WeiboAuthResp>.broadcast();
-
-  final StreamController<WeiboSdkResp> _shareMsgRespStreamController =
-      StreamController<WeiboSdkResp>.broadcast();
+  final StreamController<BaseResp> _respStreamController =
+      StreamController<BaseResp>.broadcast();
 
   Future<void> registerApp({
     required String appKey,
@@ -73,24 +69,19 @@ class Weibo {
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case _METHOD_ONAUTHRESP:
-        _authRespStreamController.add(WeiboAuthResp.fromJson(
+        _respStreamController.add(AuthResp.fromJson(
             (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
       case _METHOD_ONSHAREMSGRESP:
-        _shareMsgRespStreamController.add(WeiboSdkResp.fromJson(
+        _respStreamController.add(ShareMsgResp.fromJson(
             (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
     }
   }
 
-  /// 登录
-  Stream<WeiboAuthResp> authResp() {
-    return _authRespStreamController.stream;
-  }
-
-  /// 分享
-  Stream<WeiboSdkResp> shareMsgResp() {
-    return _shareMsgRespStreamController.stream;
+  ///
+  Stream<BaseResp> respStream() {
+    return _respStreamController.stream;
   }
 
   Future<bool> isInstalled() async {

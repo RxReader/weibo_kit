@@ -177,9 +177,9 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (METHOD_REGISTERAPP.equals(call.method)) {
-            String appKey = call.argument(ARGUMENT_KEY_APPKEY);
-            String scope = call.argument(ARGUMENT_KEY_SCOPE);
-            String redirectUrl = call.argument(ARGUMENT_KEY_REDIRECTURL);
+            final String appKey = call.argument(ARGUMENT_KEY_APPKEY);
+            final String scope = call.argument(ARGUMENT_KEY_SCOPE);
+            final String redirectUrl = call.argument(ARGUMENT_KEY_REDIRECTURL);
             iwbapi = WBAPIFactory.createWBAPI(activityPluginBinding.getActivity());
             iwbapi.registerApp(applicationContext, new AuthInfo(applicationContext, appKey, redirectUrl, scope));
             result.success(null);
@@ -202,13 +202,13 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
             iwbapi.authorize(new WbAuthListener() {
                 @Override
                 public void onComplete(Oauth2AccessToken token) {
-                    Map<String, Object> map = new HashMap<>();
+                    final Map<String, Object> map = new HashMap<>();
                     if (token.isSessionValid()) {
                         map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.SUCCESS);
                         map.put(ARGUMENT_KEY_RESULT_USERID, token.getUid());
                         map.put(ARGUMENT_KEY_RESULT_ACCESSTOKEN, token.getAccessToken());
                         map.put(ARGUMENT_KEY_RESULT_REFRESHTOKEN, token.getRefreshToken());
-                        long expiresIn = (long) Math.ceil((token.getExpiresTime() - System.currentTimeMillis()) / 1000.0);
+                        final long expiresIn = (long) Math.ceil((token.getExpiresTime() - System.currentTimeMillis()) / 1000.0);
                         map.put(ARGUMENT_KEY_RESULT_EXPIRESIN, expiresIn);// 向上取整
                     } else {
                         map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.UNKNOWN);
@@ -220,7 +220,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
 
                 @Override
                 public void onError(UiError uiError) {
-                    Map<String, Object> map = new HashMap<>();
+                    final Map<String, Object> map = new HashMap<>();
                     map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.UNKNOWN);
                     if (channel != null) {
                         channel.invokeMethod(METHOD_ONAUTHRESP, map);
@@ -229,7 +229,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
 
                 @Override
                 public void onCancel() {
-                    Map<String, Object> map = new HashMap<>();
+                    final Map<String, Object> map = new HashMap<>();
                     map.put(ARGUMENT_KEY_RESULT_ERRORCODE, WeiboErrorCode.USERCANCEL);
                     if (channel != null) {
                         channel.invokeMethod(METHOD_ONAUTHRESP, map);
@@ -241,9 +241,9 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
     }
 
     private void handleShareTextCall(@NonNull MethodCall call, @NonNull Result result) {
-        WeiboMultiMessage message = new WeiboMultiMessage();
+        final WeiboMultiMessage message = new WeiboMultiMessage();
 
-        TextObject object = new TextObject();
+        final TextObject object = new TextObject();
         object.text = call.argument(ARGUMENT_KEY_TEXT);// 1024
 
         message.textObject = object;
@@ -255,17 +255,17 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
     }
 
     private void handleShareMediaCall(@NonNull MethodCall call, @NonNull Result result) {
-        WeiboMultiMessage message = new WeiboMultiMessage();
+        final WeiboMultiMessage message = new WeiboMultiMessage();
 
         if (METHOD_SHAREIMAGE.equals(call.method)) {
             if (call.hasArgument(ARGUMENT_KEY_TEXT)) {
-                TextObject object = new TextObject();
+                final TextObject object = new TextObject();
                 object.text = call.argument(ARGUMENT_KEY_TEXT);// 1024
 
                 message.textObject = object;
             }
 
-            ImageObject object = new ImageObject();
+            final ImageObject object = new ImageObject();
             if (call.hasArgument(ARGUMENT_KEY_IMAGEDATA)) {
                 object.imageData = call.argument(ARGUMENT_KEY_IMAGEDATA);// 2 * 1024 * 1024
             } else if (call.hasArgument(ARGUMENT_KEY_IMAGEURI)) {
@@ -275,7 +275,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
 
             message.mediaObject = object;
         } else if (METHOD_SHAREWEBPAGE.equals(call.method)) {
-            WebpageObject object = new WebpageObject();
+            final WebpageObject object = new WebpageObject();
             object.identify = UUID.randomUUID().toString();
             object.title = call.argument(ARGUMENT_KEY_TITLE);// 512
             object.description = call.argument(ARGUMENT_KEY_DESCRIPTION);// 1024

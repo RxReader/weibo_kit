@@ -54,21 +54,24 @@ void main() {
   });
 
   test('auth', () async {
-    final StreamSubscription<WeiboAuthResp> sub =
-        Weibo.instance.authResp().listen((WeiboAuthResp resp) {
-      expect(resp.errorCode, WeiboSdkResp.USERCANCEL);
+    final StreamSubscription<BaseResp> subs =
+        Weibo.instance.respStream().listen((BaseResp resp) {
+      expect(resp.runtimeType, AuthResp);
+      expect(resp.errorCode, BaseResp.USERCANCEL);
     });
     await Weibo.instance.auth(
       appKey: 'your weibo app key',
       scope: <String>[WeiboScope.ALL],
     );
-    await sub.cancel();
+    await Future<void>.delayed(const Duration(seconds: 1));
+    await subs.cancel();
   });
 
   test('share', () async {
-    final StreamSubscription<WeiboSdkResp> sub =
-        Weibo.instance.shareMsgResp().listen((WeiboSdkResp resp) {
-      expect(resp.errorCode, WeiboSdkResp.USERCANCEL);
+    final StreamSubscription<BaseResp> sub =
+        Weibo.instance.respStream().listen((BaseResp resp) {
+      expect(resp.runtimeType, ShareMsgResp);
+      expect(resp.errorCode, BaseResp.USERCANCEL);
     });
     await Weibo.instance.shareText(
       text: 'share text',
