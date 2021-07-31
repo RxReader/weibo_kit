@@ -89,8 +89,9 @@ iOS 9系统策略更新，限制了http协议的访问，此外应用需要在�
 ## flutter
 
 * break change
-    * 2.0.0: nullsafety & 不再支持 Android embedding v1 & Weibo 单例
+    * 3.0.0: 重构
     * 2.0.2: iOS Universal Links
+    * 2.0.0: nullsafety & 不再支持 Android embedding v1 & Weibo 单例
 
 * snapshot
 
