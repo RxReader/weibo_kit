@@ -6,7 +6,6 @@ import 'package:weibo_kit/weibo_kit.dart';
 import 'package:weibo_kit_example/model/weibo_api_resp.dart';
 
 extension ApiWeibo on Weibo {
-
   /// 用户信息
   Future<WeiboUserInfoResp> getUserInfo({
     required String appkey,

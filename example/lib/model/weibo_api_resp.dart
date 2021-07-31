@@ -82,4 +82,3 @@ class WeiboUserInfoResp extends WeiboApiResp {
 
   Map<String, dynamic> toJson() => _$WeiboUserInfoRespToJson(this);
 }
-

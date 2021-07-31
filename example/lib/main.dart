@@ -42,33 +42,30 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late final StreamSubscription<WeiboAuthResp> _auth =
-      Weibo.instance.authResp().listen(_listenAuth);
-  late final StreamSubscription<WeiboSdkResp> _share =
-      Weibo.instance.shareMsgResp().listen(_listenShareMsg);
+  late final StreamSubscription<BaseResp> _respSubs =
+      Weibo.instance.respStream().listen(_listenResp);
 
-  WeiboAuthResp? _authResp;
+  AuthResp? _authResp;
 
   @override
   void initState() {
     super.initState();
   }
 
-  void _listenAuth(WeiboAuthResp resp) {
-    _authResp = resp;
-    final String content = 'auth: ${resp.errorCode}';
-    _showTips('登录', content);
-  }
-
-  void _listenShareMsg(WeiboSdkResp resp) {
-    final String content = 'share: ${resp.errorCode}';
-    _showTips('分享', content);
+  void _listenResp(BaseResp resp) {
+    if (resp is AuthResp) {
+      _authResp = resp;
+      final String content = 'auth: ${resp.errorCode}';
+      _showTips('登录', content);
+    } else if (resp is ShareMsgResp) {
+      final String content = 'share: ${resp.errorCode}';
+      _showTips('分享', content);
+    }
   }
 
   @override
   void dispose() {
-    _auth.cancel();
-    _share.cancel();
+    _respSubs.cancel();
     super.dispose();
   }
 
