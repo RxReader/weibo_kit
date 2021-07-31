@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:weibo_kit/src/model/sdk/weibo_sdk_resp.dart';
+import 'package:weibo_kit/src/model/weibo_sdk_resp.dart';
 
 part 'weibo_auth_resp.g.dart';
 

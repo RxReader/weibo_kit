@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image/image.dart' as image;
 import 'package:weibo_kit/weibo_kit.dart';
+import 'package:weibo_kit_example/model/weibo_api_resp.dart';
+import 'package:weibo_kit_example/weibo.dart';
 
 const String _WEIBO_APP_KEY = 'your weibo app key';
 const String _WEIBO_UNIVERSAL_LINK = 'your weibo universal link';

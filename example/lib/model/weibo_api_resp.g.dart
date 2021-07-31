@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'weibo_user_info_resp.dart';
+part of 'weibo_api_resp.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

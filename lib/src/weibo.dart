@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-import 'package:weibo_kit/src/model/api/weibo_user_info_resp.dart';
-import 'package:weibo_kit/src/model/sdk/weibo_auth_resp.dart';
-import 'package:weibo_kit/src/model/sdk/weibo_sdk_resp.dart';
+import 'package:weibo_kit/src/model/weibo_auth_resp.dart';
+import 'package:weibo_kit/src/model/weibo_sdk_resp.dart';
 
 class Weibo {
   ///
@@ -113,49 +111,6 @@ class Weibo {
         _ARGUMENT_KEY_REDIRECTURL: redirectUrl,
       },
     );
-  }
-
-  /// 用户信息
-  Future<WeiboUserInfoResp> getUserInfo({
-    required String appkey,
-    required String userId,
-    required String accessToken,
-  }) {
-    final Map<String, String> params = <String, String>{
-      'uid': userId,
-    };
-    return HttpClient()
-        .getUrl(_encodeUrl('https://api.weibo.com/2/users/show.json', appkey,
-            accessToken, params))
-        .then((HttpClientRequest request) {
-      return request.close();
-    }).then((HttpClientResponse response) async {
-      if (response.statusCode == HttpStatus.ok) {
-        final String content = await utf8.decodeStream(response);
-        return WeiboUserInfoResp.fromJson(
-            json.decode(content) as Map<String, dynamic>);
-      }
-      throw HttpException(
-          'HttpResponse statusCode: ${response.statusCode}, reasonPhrase: ${response.reasonPhrase}.');
-    });
-  }
-
-  Uri _encodeUrl(
-    String baseUrl,
-    String appkey,
-    String accessToken,
-    Map<String, String> params,
-  ) {
-    params['source'] = appkey;
-    params['access_token'] = accessToken;
-    final Uri baseUri = Uri.parse(baseUrl);
-    final Map<String, List<String>> queryParametersAll =
-        Map<String, List<String>>.of(baseUri.queryParametersAll);
-    for (final MapEntry<String, String> entry in params.entries) {
-      queryParametersAll.remove(entry.key);
-      queryParametersAll.putIfAbsent(entry.key, () => <String>[entry.value]);
-    }
-    return baseUri.replace(queryParameters: queryParametersAll);
   }
 
   /// 分享 - 文本
