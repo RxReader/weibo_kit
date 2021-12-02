@@ -55,5 +55,5 @@ android {
 dependencies {
     // v10.10.0
     vendorImplementation 'androidx.appcompat:appcompat:1.0.0'
-    vendorImplementation(name: 'openDefault-10.10.0', ext: 'aar')
+    vendorImplementation(name: 'openDefault-11.8.1', ext: 'aar')
 }
