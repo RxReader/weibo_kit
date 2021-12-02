@@ -133,7 +133,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
         switch (requestCode) {
             case 32973:
                 if (iwbapi != null) {
-                    iwbapi.authorizeCallback(requestCode, resultCode, data);
+                    iwbapi.authorizeCallback(activityPluginBinding.getActivity(), requestCode, resultCode, data);
                 }
                 return true;
             case 10001:
@@ -199,7 +199,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
 
     private void handleAuthCall(@NonNull MethodCall call, @NonNull Result result) {
         if (iwbapi != null) {
-            iwbapi.authorize(new WbAuthListener() {
+            iwbapi.authorize(activityPluginBinding.getActivity(), new WbAuthListener() {
                 @Override
                 public void onComplete(Oauth2AccessToken token) {
                     final Map<String, Object> map = new HashMap<>();
@@ -249,7 +249,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
         message.textObject = object;
 
         if (iwbapi != null) {
-            iwbapi.shareMessage(message, false);
+            iwbapi.shareMessage(activityPluginBinding.getActivity(), message, false);
         }
         result.success(null);
     }
@@ -287,7 +287,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
         }
 
         if (iwbapi != null) {
-            iwbapi.shareMessage(message, false);
+            iwbapi.shareMessage(activityPluginBinding.getActivity(), message, false);
         }
         result.success(null);
     }
