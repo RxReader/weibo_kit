@@ -1,12 +1,17 @@
 package io.github.v7lin.weibo_kit;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
 import com.sina.weibo.sdk.api.ImageObject;
+import com.sina.weibo.sdk.api.MultiImageObject;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WebpageObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
@@ -14,10 +19,13 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WbAuthListener;
 import com.sina.weibo.sdk.common.UiError;
+import com.sina.weibo.sdk.content.FileProvider;
 import com.sina.weibo.sdk.openapi.IWBAPI;
 import com.sina.weibo.sdk.openapi.WBAPIFactory;
 import com.sina.weibo.sdk.share.WbShareCallback;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -265,15 +273,34 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
                 message.textObject = object;
             }
 
-            final ImageObject object = new ImageObject();
-            if (call.hasArgument(ARGUMENT_KEY_IMAGEDATA)) {
-                object.imageData = call.argument(ARGUMENT_KEY_IMAGEDATA);// 2 * 1024 * 1024
-            } else if (call.hasArgument(ARGUMENT_KEY_IMAGEURI)) {
+            if (iwbapi != null && iwbapi.isWBAppSupportMultipleImage() && call.hasArgument(ARGUMENT_KEY_IMAGEURI)) {
+                final MultiImageObject object = new MultiImageObject();
                 String imageUri = call.argument(ARGUMENT_KEY_IMAGEURI);
-                object.imagePath = Uri.parse(imageUri).getPath();// 512 - 10 * 1024 * 1024
+                ArrayList<Uri> images = new ArrayList<>();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    try {
+                        final ProviderInfo providerInfo = applicationContext.getPackageManager().getProviderInfo(new ComponentName(applicationContext, FileProvider.class), PackageManager.MATCH_DEFAULT_ONLY);
+                        final Uri shareFileUri = FileProvider.getUriForFile(applicationContext, providerInfo.authority, new File(Uri.parse(imageUri).getPath()));
+                        applicationContext.grantUriPermission("com.sina.weibo", shareFileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        images.add(shareFileUri);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        images.add(Uri.parse(imageUri));
+                    }
+                } else {
+                    images.add(Uri.parse(imageUri));
+                }
+                object.imageList = images;
+                message.mediaObject = object;
+            } else {
+                final ImageObject object = new ImageObject();
+                if (call.hasArgument(ARGUMENT_KEY_IMAGEDATA)) {
+                    object.imageData = call.argument(ARGUMENT_KEY_IMAGEDATA);// 2 * 1024 * 1024
+                } else if (call.hasArgument(ARGUMENT_KEY_IMAGEURI)) {
+                    String imageUri = call.argument(ARGUMENT_KEY_IMAGEURI);
+                    object.imagePath = Uri.parse(imageUri).getPath();// 512 - 10 * 1024 * 1024
+                }
+                message.mediaObject = object;
             }
-
-            message.mediaObject = object;
         } else if (METHOD_SHAREWEBPAGE.equals(call.method)) {
             final WebpageObject object = new WebpageObject();
             object.identify = UUID.randomUUID().toString();
