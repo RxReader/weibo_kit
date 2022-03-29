@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
+// import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:image/image.dart' as image;
+// import 'package:image/image.dart' as image;
 import 'package:weibo_kit/weibo_kit.dart';
 import 'package:weibo_kit_example/model/weibo_api_resp.dart';
 import 'package:weibo_kit_example/weibo.dart';
