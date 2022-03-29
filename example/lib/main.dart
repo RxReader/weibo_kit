@@ -136,21 +136,21 @@ class _HomeState extends State<Home> {
           ListTile(
             title: const Text('网页分享'),
             onTap: () async {
-              final File file = await DefaultCacheManager().getSingleFile(
-                  'https://www.baidu.com/img/bd_logo1.png?where=super');
-              final image.Image thumbnail =
-                  image.decodeImage(file.readAsBytesSync())!;
-              Uint8List thumbData = thumbnail.getBytes();
-              if (thumbData.length > 32 * 1024) {
-                thumbData = Uint8List.fromList(image.encodeJpg(thumbnail,
-                    quality: 100 * 32 * 1024 ~/ thumbData.length));
-              }
-              await Weibo.instance.shareWebpage(
-                title: 'title',
-                description: 'share webpage',
-                thumbData: thumbData.buffer.asUint8List(),
-                webpageUrl: 'https://www.baidu.com',
-              );
+              // final File file = await DefaultCacheManager().getSingleFile(
+              //     'https://www.baidu.com/img/bd_logo1.png?where=super');
+              // final image.Image thumbnail =
+              //     image.decodeImage(file.readAsBytesSync())!;
+              // Uint8List thumbData = thumbnail.getBytes();
+              // if (thumbData.length > 32 * 1024) {
+              //   thumbData = Uint8List.fromList(image.encodeJpg(thumbnail,
+              //       quality: 100 * 32 * 1024 ~/ thumbData.length));
+              // }
+              // await Weibo.instance.shareWebpage(
+              //   title: 'title',
+              //   description: 'share webpage',
+              //   thumbData: thumbData.buffer.asUint8List(),
+              //   webpageUrl: 'https://www.baidu.com',
+              // );
             },
           ),
         ],
