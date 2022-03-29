@@ -42,14 +42,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late final StreamSubscription<BaseResp> _respSubs =
-      Weibo.instance.respStream().listen(_listenResp);
+  late final StreamSubscription<BaseResp> _respSubs;
 
   AuthResp? _authResp;
 
   @override
   void initState() {
     super.initState();
+    _respSubs = Weibo.instance.respStream().listen(_listenResp);
   }
 
   void _listenResp(BaseResp resp) {
