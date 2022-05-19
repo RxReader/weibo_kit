@@ -28,9 +28,9 @@ abstract class WeiboApiResp {
 )
 class WeiboUserInfoResp extends WeiboApiResp {
   const WeiboUserInfoResp({
-    required int errorCode,
-    String? error,
-    String? request,
+    required super.errorCode,
+    super.error,
+    super.request,
     this.id,
     this.idstr,
     this.screenName,
@@ -41,7 +41,7 @@ class WeiboUserInfoResp extends WeiboApiResp {
     this.gender,
     this.avatarLarge,
     this.avatarHd,
-  }) : super(errorCode: errorCode, error: error, request: request);
+  });
 
   factory WeiboUserInfoResp.fromJson(Map<String, dynamic> json) =>
       _$WeiboUserInfoRespFromJson(json);

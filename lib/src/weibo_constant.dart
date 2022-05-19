@@ -1,3 +1,10 @@
+class WeiboRegister {
+  const WeiboRegister._();
+
+  static const String DEFAULT_REDIRECTURL =
+      'https://api.weibo.com/oauth2/default.html';
+}
+
 class WeiboScope {
   const WeiboScope._();
 

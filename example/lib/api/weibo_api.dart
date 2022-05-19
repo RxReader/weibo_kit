@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:weibo_kit/weibo_kit.dart';
-import 'package:weibo_kit_example/model/weibo_api_resp.dart';
+import 'package:weibo_kit_example/api/model/weibo_api_resp.dart';
 
-extension ApiWeibo on Weibo {
+class WeiboApi {
+  const WeiboApi._();
+
   /// 用户信息
-  Future<WeiboUserInfoResp> getUserInfo({
+  static Future<WeiboUserInfoResp> getUserInfo({
     required String appkey,
     required String userId,
     required String accessToken,
@@ -31,7 +32,7 @@ extension ApiWeibo on Weibo {
     });
   }
 
-  Uri _encodeUrl(
+  static Uri _encodeUrl(
     String baseUrl,
     String appkey,
     String accessToken,

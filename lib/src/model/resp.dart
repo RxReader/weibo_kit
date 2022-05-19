@@ -57,14 +57,14 @@ abstract class BaseResp {
   explicitToJson: true,
 )
 class AuthResp extends BaseResp {
-  AuthResp({
-    required int errorCode,
-    String? errorMessage,
+  const AuthResp({
+    required super.errorCode,
+    super.errorMessage,
     this.userId,
     this.accessToken,
     this.refreshToken,
     this.expiresIn,
-  }) : super(errorCode: errorCode, errorMessage: errorMessage);
+  });
 
   factory AuthResp.fromJson(Map<String, dynamic> json) =>
       _$AuthRespFromJson(json);
@@ -83,9 +83,9 @@ class AuthResp extends BaseResp {
 )
 class ShareMsgResp extends BaseResp {
   const ShareMsgResp({
-    required int errorCode,
-    String? errorMessage,
-  }) : super(errorCode: errorCode, errorMessage: errorMessage);
+    required super.errorCode,
+    super.errorMessage,
+  });
 
   factory ShareMsgResp.fromJson(Map<String, dynamic> json) =>
       _$ShareMsgRespFromJson(json);

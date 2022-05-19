@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-// import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-// import 'package:image/image.dart' as image;
 import 'package:weibo_kit/weibo_kit.dart';
-import 'package:weibo_kit_example/model/weibo_api_resp.dart';
-import 'package:weibo_kit_example/weibo.dart';
+import 'package:weibo_kit_example/api/model/weibo_api_resp.dart';
+import 'package:weibo_kit_example/api/weibo_api.dart';
 
 const String _WEIBO_APP_KEY = 'your weibo app key';
 const String _WEIBO_UNIVERSAL_LINK = 'your weibo universal link';
@@ -16,16 +14,14 @@ const List<String> _WEIBO_SCOPE = <String>[
 ];
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  Weibo.instance.registerApp(
-    appKey: _WEIBO_APP_KEY,
-    universalLink: _WEIBO_UNIVERSAL_LINK,
-    scope: _WEIBO_SCOPE,
-  );
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,6 +31,9 @@ class MyApp extends StatelessWidget {
 }
 
 class Home extends StatefulWidget {
+  const Home({
+    super.key,
+  });
   @override
   State<StatefulWidget> createState() {
     return _HomeState();
@@ -73,12 +72,23 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Weibo Kit Demo'),
+        title: Text('Weibo Kit Demo'),
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: const Text('环境检查'),
+            title: Text('注册APP'),
+            onTap: () async {
+              await Weibo.instance.registerApp(
+                appKey: _WEIBO_APP_KEY,
+                universalLink: _WEIBO_UNIVERSAL_LINK,
+                scope: _WEIBO_SCOPE,
+              );
+              _showTips('注册APP', '注册成功');
+            },
+          ),
+          ListTile(
+            title: Text('环境检查'),
             onTap: () async {
               final String content =
                   'weibo: ${await Weibo.instance.isInstalled()}';
@@ -86,7 +96,7 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            title: const Text('登录'),
+            title: Text('登录'),
             onTap: () {
               Weibo.instance.auth(
                 appKey: _WEIBO_APP_KEY,
@@ -95,11 +105,11 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            title: const Text('用户信息'),
+            title: Text('用户信息'),
             onTap: () async {
               if (_authResp?.isSuccessful ?? false) {
                 final WeiboUserInfoResp userInfoResp =
-                    await Weibo.instance.getUserInfo(
+                    await WeiboApi.getUserInfo(
                   appkey: _WEIBO_APP_KEY,
                   userId: _authResp!.userId!,
                   accessToken: _authResp!.accessToken!,
@@ -115,7 +125,7 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            title: const Text('文字分享'),
+            title: Text('文字分享'),
             onTap: () {
               Weibo.instance.shareText(
                 text: 'Share Text',
@@ -123,7 +133,7 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            title: const Text('图片分享'),
+            title: Text('图片分享'),
             onTap: () async {
               final File file = await DefaultCacheManager().getSingleFile(
                   'https://www.baidu.com/img/bd_logo1.png?where=super');
@@ -134,7 +144,7 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            title: const Text('网页分享'),
+            title: Text('网页分享'),
             onTap: () async {
               // final File file = await DefaultCacheManager().getSingleFile(
               //     'https://www.baidu.com/img/bd_logo1.png?where=super');

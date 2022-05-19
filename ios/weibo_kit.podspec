@@ -1,10 +1,10 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint weibo_kit.podspec' to validate before publishing.
+# Run `pod lib lint weibo_kit.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'weibo_kit'
-  s.version          = '3.1.0'
+  s.version          = '4.0.0'
   s.summary          = 'A powerful Flutter plugin allowing developers to auth/share with natvie Android & iOS Weibo SDKs.'
   s.description      = <<-DESC
 A powerful Flutter plugin allowing developers to auth/share with natvie Android & iOS Weibo SDKs.
