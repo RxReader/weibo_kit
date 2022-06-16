@@ -123,7 +123,6 @@
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *_Nonnull))restorationHandler {
     return [WeiboSDK handleOpenUniversalLink:userActivity delegate:self];
-    ;
 }
 
 #pragma mark - WeiboSDKDelegate
