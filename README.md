@@ -76,6 +76,85 @@ iOS 9系统策略更新，限制了http协议的访问，此外应用需要在�
     <string>weibosdk3.3</string>
 </array>
 ```
+
+```
+由于iOS9/10的发布，原有ATS设置在iOS10上会出现https网络访问限制的问题，为了确保好的应用体验，我们需要采取如下措施：
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>sina.cn</key>
+        <dict>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>sina.com.cn</key>
+        <dict>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>sinaimg.cn</key>
+        <dict>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>sinajs.cn</key>
+        <dict>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>weibo.cn</key>
+        <dict>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+        <key>weibo.com</key>
+        <dict>
+            <key>NSExceptionMinimumTLSVersion</key>
+            <string>TLSv1.0</string>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+            <false/>
+        </dict>
+    </dict>
+</dict>
+```
+
 ## flutter
 
 * break change
