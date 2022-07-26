@@ -32,6 +32,11 @@ class MockWeiboKitPlatform
   }
 
   @override
+  Future<bool> isSupportMultipleImage() {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<void> auth({
     required String appKey,
     required List<String> scope,
@@ -43,6 +48,7 @@ class MockWeiboKitPlatform
   @override
   Future<void> shareText({
     required String text,
+    bool clientOnly = false,
   }) {
     throw UnimplementedError();
   }
@@ -52,6 +58,25 @@ class MockWeiboKitPlatform
     String? text,
     Uint8List? imageData,
     Uri? imageUri,
+    bool clientOnly = false,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> shareMultiImage({
+    String? text,
+    required List<Uri> imageUris,
+    bool clientOnly = false,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> shareVideo({
+    String? text,
+    required Uri videoUri,
+    bool clientOnly = false,
   }) {
     throw UnimplementedError();
   }
@@ -62,6 +87,7 @@ class MockWeiboKitPlatform
     required String description,
     required Uint8List thumbData,
     required String webpageUrl,
+    bool clientOnly = false,
   }) {
     throw UnimplementedError();
   }

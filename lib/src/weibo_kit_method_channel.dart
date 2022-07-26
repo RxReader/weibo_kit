@@ -12,21 +12,16 @@ import 'package:weibo_kit/src/weibo_kit_platform_interface.dart';
 class MethodChannelWeiboKit extends WeiboKitPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  late final MethodChannel methodChannel =
-      const MethodChannel('v7lin.github.io/weibo_kit')
-        ..setMethodCallHandler(_handleMethod);
-  final StreamController<BaseResp> _respStreamController =
-      StreamController<BaseResp>.broadcast();
+  late final MethodChannel methodChannel = const MethodChannel('v7lin.github.io/weibo_kit')..setMethodCallHandler(_handleMethod);
+  final StreamController<BaseResp> _respStreamController = StreamController<BaseResp>.broadcast();
 
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case 'onAuthResp':
-        _respStreamController.add(AuthResp.fromJson(
-            (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
+        _respStreamController.add(AuthResp.fromJson((call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
       case 'onShareMsgResp':
-        _respStreamController.add(ShareMsgResp.fromJson(
-            (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
+        _respStreamController.add(ShareMsgResp.fromJson((call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
     }
   }
@@ -61,6 +56,11 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
   }
 
   @override
+  Future<bool> isSupportMultipleImage() async {
+    return await methodChannel.invokeMethod<bool>('isSupportMultipleImage') ?? false;
+  }
+
+  @override
   Future<void> auth({
     required String appKey,
     required List<String> scope,
@@ -79,11 +79,13 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
   @override
   Future<void> shareText({
     required String text,
+    bool clientOnly = false,
   }) {
     return methodChannel.invokeMethod<void>(
       'shareText',
       <String, dynamic>{
         'text': text,
+        'clientOnly': clientOnly,
       },
     );
   }
@@ -93,19 +95,54 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
     String? text,
     Uint8List? imageData,
     Uri? imageUri,
+    bool clientOnly = false,
   }) {
     assert(text == null || text.length <= 1024);
     assert((imageData != null && imageData.lengthInBytes <= 2 * 1024 * 1024) ||
-        (imageUri != null &&
-            imageUri.isScheme('file') &&
-            imageUri.toFilePath().length <= 512 &&
-            File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
+        (imageUri != null && imageUri.isScheme('file') && imageUri.toFilePath().length <= 512 && File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
     return methodChannel.invokeMethod<void>(
       'shareImage',
       <String, dynamic>{
         if (text != null && text.isNotEmpty) 'text': text,
         if (imageData != null) 'imageData': imageData,
         if (imageUri != null) 'imageUri': imageUri.toString(),
+        'clientOnly': clientOnly,
+      },
+    );
+  }
+
+  @override
+  Future<void> shareMultiImage({
+    String? text,
+    required List<Uri> imageUris,
+    bool clientOnly = false,
+  }) {
+    assert(text == null || text.length <= 1024);
+    assert(imageUris.isNotEmpty && imageUris.every((Uri element) => element.isScheme('file')));
+    return methodChannel.invokeMethod<void>(
+      'shareMultiImage',
+      <String, dynamic>{
+        if (text != null && text.isNotEmpty) 'text': text,
+        'imageUris': imageUris.map((Uri element) => element.toString()).toList(),
+        'clientOnly': clientOnly,
+      },
+    );
+  }
+
+  @override
+  Future<void> shareVideo({
+    String? text,
+    required Uri videoUri,
+    bool clientOnly = false,
+  }) {
+    assert(text == null || text.length <= 1024);
+    assert(videoUri.isScheme('file'));
+    return methodChannel.invokeMethod<void>(
+      'shareVideo',
+      <String, dynamic>{
+        if (text != null && text.isNotEmpty) 'text': text,
+        'videoUri': videoUri.toString(),
+        'clientOnly': clientOnly,
       },
     );
   }
@@ -116,6 +153,7 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
     required String description,
     required Uint8List thumbData,
     required String webpageUrl,
+    bool clientOnly = false,
   }) {
     assert(title.length <= 512);
     assert(description.isNotEmpty && description.length <= 1024);
@@ -128,6 +166,7 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
         'description': description,
         'thumbData': thumbData,
         'webpageUrl': webpageUrl,
+        'clientOnly': clientOnly,
       },
     );
   }

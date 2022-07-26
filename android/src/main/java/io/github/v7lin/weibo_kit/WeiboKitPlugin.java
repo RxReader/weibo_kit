@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.MultiImageObject;
 import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.VideoSourceObject;
 import com.sina.weibo.sdk.api.WebpageObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -27,7 +28,9 @@ import com.sina.weibo.sdk.share.WbShareCallback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -164,91 +167,105 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
             iwbapi.registerApp(applicationContext, new AuthInfo(applicationContext, appKey, redirectUrl, scope));
             result.success(null);
         } else if ("isInstalled".equals(call.method)) {
-            result.success(iwbapi.isWBAppInstalled());
+            if (iwbapi != null) {
+                result.success(iwbapi.isWBAppInstalled());
+            } else {
+                result.error("FAILED", "请先调用registerApp", null);
+            }
+        } else if ("isSupportMultipleImage".equals(call.method)) {
+            if (iwbapi != null) {
+                result.success(iwbapi.isWBAppSupportMultipleImage());
+            } else {
+                result.error("FAILED", "请先调用registerApp", null);
+            }
         } else if ("auth".equals(call.method)) {
-            handleAuthCall(call, result);
-        } else if ("shareText".equals(call.method)) {
-            handleShareTextCall(call, result);
-        } else if ("shareImage".equals(call.method) ||
-                "shareWebpage".equals(call.method)) {
-            handleShareMediaCall(call, result);
+            if (iwbapi != null) {
+                handleAuthCall(call, result);
+            } else {
+                result.error("FAILED", "请先调用registerApp", null);
+            }
+        } else if (Arrays.asList("shareText", "shareImage", "shareMultiImage", "shareVideo", "shareWebpage").contains(call.method)) {
+            if (iwbapi != null) {
+                handleShareCall(call, result);
+            } else {
+                result.error("FAILED", "请先调用registerApp", null);
+            }
         } else {
             result.notImplemented();
         }
     }
 
     private void handleAuthCall(@NonNull MethodCall call, @NonNull Result result) {
-        if (iwbapi != null) {
-            iwbapi.authorize(activityPluginBinding.getActivity(), new WbAuthListener() {
-                @Override
-                public void onComplete(Oauth2AccessToken token) {
-                    final Map<String, Object> map = new HashMap<>();
-                    if (token.isSessionValid()) {
-                        map.put("errorCode", WeiboErrorCode.SUCCESS);
-                        map.put("userId", token.getUid());
-                        map.put("accessToken", token.getAccessToken());
-                        map.put("refreshToken", token.getRefreshToken());
-                        final long expiresIn = (long) Math.ceil(token.getExpiresTime() / 1000.0);
-                        map.put("expiresIn", expiresIn);// 向上取整
-                    } else {
-                        map.put("errorCode", WeiboErrorCode.UNKNOWN);
-                    }
-                    if (channel != null) {
-                        channel.invokeMethod("onAuthResp", map);
-                    }
-                }
-
-                @Override
-                public void onError(UiError uiError) {
-                    final Map<String, Object> map = new HashMap<>();
+        iwbapi.authorize(activityPluginBinding.getActivity(), new WbAuthListener() {
+            @Override
+            public void onComplete(Oauth2AccessToken token) {
+                final Map<String, Object> map = new HashMap<>();
+                if (token.isSessionValid()) {
+                    map.put("errorCode", WeiboErrorCode.SUCCESS);
+                    map.put("userId", token.getUid());
+                    map.put("accessToken", token.getAccessToken());
+                    map.put("refreshToken", token.getRefreshToken());
+                    final long expiresIn = (long) Math.ceil(token.getExpiresTime() / 1000.0);
+                    map.put("expiresIn", expiresIn);// 向上取整
+                } else {
                     map.put("errorCode", WeiboErrorCode.UNKNOWN);
-                    if (channel != null) {
-                        channel.invokeMethod("onAuthResp", map);
-                    }
                 }
+                if (channel != null) {
+                    channel.invokeMethod("onAuthResp", map);
+                }
+            }
 
-                @Override
-                public void onCancel() {
-                    final Map<String, Object> map = new HashMap<>();
-                    map.put("errorCode", WeiboErrorCode.USERCANCEL);
-                    if (channel != null) {
-                        channel.invokeMethod("onAuthResp", map);
-                    }
+            @Override
+            public void onError(UiError uiError) {
+                final Map<String, Object> map = new HashMap<>();
+                map.put("errorCode", WeiboErrorCode.UNKNOWN);
+                if (channel != null) {
+                    channel.invokeMethod("onAuthResp", map);
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onCancel() {
+                final Map<String, Object> map = new HashMap<>();
+                map.put("errorCode", WeiboErrorCode.USERCANCEL);
+                if (channel != null) {
+                    channel.invokeMethod("onAuthResp", map);
+                }
+            }
+        });
         result.success(null);
     }
 
-    private void handleShareTextCall(@NonNull MethodCall call, @NonNull Result result) {
+    private void handleShareCall(@NonNull MethodCall call, @NonNull Result result) {
         final WeiboMultiMessage message = new WeiboMultiMessage();
-
-        final TextObject object = new TextObject();
-        object.text = call.argument("text");// 1024
-
-        message.textObject = object;
-
-        if (iwbapi != null) {
-            iwbapi.shareMessage(activityPluginBinding.getActivity(), message, false);
-        }
-        result.success(null);
-    }
-
-    private void handleShareMediaCall(@NonNull MethodCall call, @NonNull Result result) {
-        final WeiboMultiMessage message = new WeiboMultiMessage();
-
-        if ("shareImage".equals(call.method)) {
+        if ("shareText".equals(call.method)) {
+            final TextObject object = new TextObject();
+            object.text = call.argument("text");// 1024
+            message.textObject = object;
+        } else if ("shareImage".equals(call.method)) {
             if (call.hasArgument("text")) {
                 final TextObject object = new TextObject();
                 object.text = call.argument("text");// 1024
-
                 message.textObject = object;
             }
-
-            if (iwbapi != null && iwbapi.isWBAppSupportMultipleImage() && call.hasArgument("imageUri")) {
-                final MultiImageObject object = new MultiImageObject();
+            final ImageObject object = new ImageObject();
+            if (call.hasArgument("imageData")) {
+                object.imageData = call.argument("imageData");// 2 * 1024 * 1024
+            } else if (call.hasArgument("imageUri")) {
                 final String imageUri = call.argument("imageUri");
-                final ArrayList<Uri> images = new ArrayList<>();
+                object.imagePath = Uri.parse(imageUri).getPath();// 512 - 10 * 1024 * 1024
+            }
+            message.imageObject = object;
+        } else if ("shareMultiImage".equals(call.method)) {
+            if (call.hasArgument("text")) {
+                final TextObject object = new TextObject();
+                object.text = call.argument("text");// 1024
+                message.textObject = object;
+            }
+            final MultiImageObject object = new MultiImageObject();
+            final List<String> imageUris = call.argument("imageUris");
+            final ArrayList<Uri> images = new ArrayList<>();
+            for (String imageUri : imageUris) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     try {
                         final ProviderInfo providerInfo = applicationContext.getPackageManager().getProviderInfo(new ComponentName(applicationContext, FileProvider.class), PackageManager.MATCH_DEFAULT_ONLY);
@@ -261,18 +278,30 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
                 } else {
                     images.add(Uri.parse(imageUri));
                 }
-                object.imageList = images;
-                message.mediaObject = object;
-            } else {
-                final ImageObject object = new ImageObject();
-                if (call.hasArgument("imageData")) {
-                    object.imageData = call.argument("imageData");// 2 * 1024 * 1024
-                } else if (call.hasArgument("imageUri")) {
-                    final String imageUri = call.argument("imageUri");
-                    object.imagePath = Uri.parse(imageUri).getPath();// 512 - 10 * 1024 * 1024
-                }
-                message.mediaObject = object;
             }
+            object.imageList = images;
+            message.multiImageObject = object;
+        } else if ("shareVideo".equals(call.method)) {
+            if (call.hasArgument("text")) {
+                final TextObject object = new TextObject();
+                object.text = call.argument("text");// 1024
+                message.textObject = object;
+            }
+            final VideoSourceObject object = new VideoSourceObject();
+            final String videoUri = call.argument("videoUri");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                try {
+                    final ProviderInfo providerInfo = applicationContext.getPackageManager().getProviderInfo(new ComponentName(applicationContext, FileProvider.class), PackageManager.MATCH_DEFAULT_ONLY);
+                    final Uri shareFileUri = FileProvider.getUriForFile(applicationContext, providerInfo.authority, new File(Uri.parse(videoUri).getPath()));
+                    applicationContext.grantUriPermission("com.sina.weibo", shareFileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    object.videoPath = shareFileUri;
+                } catch (PackageManager.NameNotFoundException e) {
+                    object.videoPath = Uri.parse(videoUri);
+                }
+            } else {
+                object.videoPath = Uri.parse(videoUri);
+            }
+            message.videoSourceObject = object;
         } else if ("shareWebpage".equals(call.method)) {
             final WebpageObject object = new WebpageObject();
             object.identify = UUID.randomUUID().toString();
@@ -285,9 +314,9 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
             message.mediaObject = object;
         }
 
-        if (iwbapi != null) {
-            iwbapi.shareMessage(activityPluginBinding.getActivity(), message, false);
-        }
+        final boolean clientOnly = call.argument("clientOnly");
+
+        iwbapi.shareMessage(activityPluginBinding.getActivity(), message, clientOnly);
         result.success(null);
     }
 }
