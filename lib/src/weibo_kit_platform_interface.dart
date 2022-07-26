@@ -31,9 +31,11 @@ abstract class WeiboKitPlatform extends PlatformInterface {
     required String appKey,
     required String? universalLink,
     required List<String> scope,
-    String redirectUrl = WeiboRegister.DEFAULT_REDIRECTURL, // 新浪微博开放平台 -> 我的应用 -> 应用信息 -> 高级信息 -> OAuth2.0授权设置
+    String redirectUrl = WeiboRegister
+        .DEFAULT_REDIRECTURL, // 新浪微博开放平台 -> 我的应用 -> 应用信息 -> 高级信息 -> OAuth2.0授权设置
   }) {
-    throw UnimplementedError('registerApp({required appKey, required universalLink, required scope, redirectUrl}) has not been implemented.');
+    throw UnimplementedError(
+        'registerApp({required appKey, required universalLink, required scope, redirectUrl}) has not been implemented.');
   }
 
   ///
@@ -48,7 +50,8 @@ abstract class WeiboKitPlatform extends PlatformInterface {
 
   ///
   Future<bool> isSupportMultipleImage() {
-    throw UnimplementedError('isSupportMultipleImage() has not been implemented.');
+    throw UnimplementedError(
+        'isSupportMultipleImage() has not been implemented.');
   }
 
   /// 登录
@@ -57,15 +60,17 @@ abstract class WeiboKitPlatform extends PlatformInterface {
     required List<String> scope,
     String redirectUrl = WeiboRegister.DEFAULT_REDIRECTURL,
   }) {
-    throw UnimplementedError('auth({required appKey, required scope, redirectUrl}) has not been implemented.');
+    throw UnimplementedError(
+        'auth({required appKey, required scope, redirectUrl}) has not been implemented.');
   }
 
   /// 分享 - 文本
   Future<void> shareText({
     required String text,
-    bool clientOnly = false/* Android Only */,
+    bool clientOnly = false /* Android Only */,
   }) {
-    throw UnimplementedError('shareText({required text, clientOnly}) has not been implemented.');
+    throw UnimplementedError(
+        'shareText({required text, clientOnly}) has not been implemented.');
   }
 
   /// 分享 - 图片
@@ -74,27 +79,30 @@ abstract class WeiboKitPlatform extends PlatformInterface {
     String? text,
     Uint8List? imageData,
     Uri? imageUri,
-    bool clientOnly = false/* Android Only */,
+    bool clientOnly = false /* Android Only */,
   }) {
-    throw UnimplementedError('shareImage({text, imageData, imageUri, clientOnly}) has not been implemented.');
+    throw UnimplementedError(
+        'shareImage({text, imageData, imageUri, clientOnly}) has not been implemented.');
   }
 
   /// 分享 - 多图
   Future<void> shareMultiImage({
     String? text,
     required List<Uri> imageUris,
-    bool clientOnly = false/* Android Only */,
+    bool clientOnly = false /* Android Only */,
   }) {
-    throw UnimplementedError('shareMultiImage({text, required imageUris, clientOnly}) has not been implemented.');
+    throw UnimplementedError(
+        'shareMultiImage({text, required imageUris, clientOnly}) has not been implemented.');
   }
 
   /// 分享 - 视频
   Future<void> shareVideo({
     String? text,
     required Uri videoUri,
-    bool clientOnly = false/* Android Only */,
+    bool clientOnly = false /* Android Only */,
   }) {
-    throw UnimplementedError('shareVideo({text, required videoUri, clientOnly}) has not been implemented.');
+    throw UnimplementedError(
+        'shareVideo({text, required videoUri, clientOnly}) has not been implemented.');
   }
 
   /// 分享 - 网页
@@ -103,8 +111,9 @@ abstract class WeiboKitPlatform extends PlatformInterface {
     required String description,
     required Uint8List thumbData,
     required String webpageUrl,
-    bool clientOnly = false/* Android Only */,
+    bool clientOnly = false /* Android Only */,
   }) {
-    throw UnimplementedError('shareWebpage({required title, required description, required thumbData, required webpageUrl, clientOnly}) has not been implemented.');
+    throw UnimplementedError(
+        'shareWebpage({required title, required description, required thumbData, required webpageUrl, clientOnly}) has not been implemented.');
   }
 }

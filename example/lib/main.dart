@@ -95,7 +95,8 @@ class _HomeState extends State<Home> {
           ListTile(
             title: Text('环境检查'),
             onTap: () async {
-              final String content = 'weibo: ${await Weibo.instance.isInstalled()}';
+              final String content =
+                  'weibo: ${await Weibo.instance.isInstalled()}';
               _showTips('环境检查', content);
             },
           ),
@@ -112,15 +113,18 @@ class _HomeState extends State<Home> {
             title: Text('用户信息'),
             onTap: () async {
               if (_authResp?.isSuccessful ?? false) {
-                final WeiboUserInfoResp userInfoResp = await WeiboApi.getUserInfo(
+                final WeiboUserInfoResp userInfoResp =
+                    await WeiboApi.getUserInfo(
                   appkey: _WEIBO_APP_KEY,
                   userId: _authResp!.userId!,
                   accessToken: _authResp!.accessToken!,
                 );
                 if (userInfoResp.isSuccessful) {
-                  _showTips('用户信息', '${userInfoResp.screenName}\n${userInfoResp.description}\n${userInfoResp.location}\n${userInfoResp.profileImageUrl}');
+                  _showTips('用户信息',
+                      '${userInfoResp.screenName}\n${userInfoResp.description}\n${userInfoResp.location}\n${userInfoResp.profileImageUrl}');
                 } else {
-                  _showTips('用户信息', '获取用户信息失败\n${userInfoResp.errorCode}:${userInfoResp.error}');
+                  _showTips('用户信息',
+                      '获取用户信息失败\n${userInfoResp.errorCode}:${userInfoResp.error}');
                 }
               }
             },
@@ -136,15 +140,19 @@ class _HomeState extends State<Home> {
           ListTile(
             title: Text('图片分享'),
             onTap: () async {
-              File file = await DefaultCacheManager().getSingleFile('https://www.baidu.com/img/bd_logo1.png?where=super');
+              File file = await DefaultCacheManager().getSingleFile(
+                  'https://www.baidu.com/img/bd_logo1.png?where=super');
               if (Platform.isAndroid) {
                 // 仅支持 Context.getExternalFilesDir(null)/Context.getExternalCacheDirs(null) 路径分享
                 // path_provider.getExternalCacheDirectories();
                 // path_provider.getExternalStorageDirectory();
-                final Directory temporaryDir = await path_provider.getTemporaryDirectory();
+                final Directory temporaryDir =
+                    await path_provider.getTemporaryDirectory();
                 if (path.isWithin(temporaryDir.parent.path, file.path)) {
                   // 复制
-                  final File copyFile = File(path.join((await path_provider.getExternalStorageDirectory())!.path, path.basename(file.path)));
+                  final File copyFile = File(path.join(
+                      (await path_provider.getExternalStorageDirectory())!.path,
+                      path.basename(file.path)));
                   if (copyFile.existsSync()) {
                     await copyFile.delete();
                   }
@@ -161,11 +169,14 @@ class _HomeState extends State<Home> {
           ListTile(
             title: Text('网页分享'),
             onTap: () async {
-              final File file = await DefaultCacheManager().getSingleFile('https://www.baidu.com/img/bd_logo1.png?where=super');
-              final imglib.Image thumbnail = imglib.decodeImage(file.readAsBytesSync())!;
+              final File file = await DefaultCacheManager().getSingleFile(
+                  'https://www.baidu.com/img/bd_logo1.png?where=super');
+              final imglib.Image thumbnail =
+                  imglib.decodeImage(file.readAsBytesSync())!;
               Uint8List thumbData = thumbnail.getBytes();
               if (thumbData.length > 32 * 1024) {
-                thumbData = Uint8List.fromList(imglib.encodeJpg(thumbnail, quality: 100 * 32 * 1024 ~/ thumbData.length));
+                thumbData = Uint8List.fromList(imglib.encodeJpg(thumbnail,
+                    quality: 100 * 32 * 1024 ~/ thumbData.length));
               }
               await Weibo.instance.shareWebpage(
                 title: 'title',

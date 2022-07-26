@@ -12,16 +12,21 @@ import 'package:weibo_kit/src/weibo_kit_platform_interface.dart';
 class MethodChannelWeiboKit extends WeiboKitPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  late final MethodChannel methodChannel = const MethodChannel('v7lin.github.io/weibo_kit')..setMethodCallHandler(_handleMethod);
-  final StreamController<BaseResp> _respStreamController = StreamController<BaseResp>.broadcast();
+  late final MethodChannel methodChannel =
+      const MethodChannel('v7lin.github.io/weibo_kit')
+        ..setMethodCallHandler(_handleMethod);
+  final StreamController<BaseResp> _respStreamController =
+      StreamController<BaseResp>.broadcast();
 
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case 'onAuthResp':
-        _respStreamController.add(AuthResp.fromJson((call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
+        _respStreamController.add(AuthResp.fromJson(
+            (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
       case 'onShareMsgResp':
-        _respStreamController.add(ShareMsgResp.fromJson((call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
+        _respStreamController.add(ShareMsgResp.fromJson(
+            (call.arguments as Map<dynamic, dynamic>).cast<String, dynamic>()));
         break;
     }
   }
@@ -57,7 +62,8 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
 
   @override
   Future<bool> isSupportMultipleImage() async {
-    return await methodChannel.invokeMethod<bool>('isSupportMultipleImage') ?? false;
+    return await methodChannel.invokeMethod<bool>('isSupportMultipleImage') ??
+        false;
   }
 
   @override
@@ -99,7 +105,10 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
   }) {
     assert(text == null || text.length <= 1024);
     assert((imageData != null && imageData.lengthInBytes <= 2 * 1024 * 1024) ||
-        (imageUri != null && imageUri.isScheme('file') && imageUri.toFilePath().length <= 512 && File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
+        (imageUri != null &&
+            imageUri.isScheme('file') &&
+            imageUri.toFilePath().length <= 512 &&
+            File.fromUri(imageUri).lengthSync() <= 10 * 1024 * 1024));
     return methodChannel.invokeMethod<void>(
       'shareImage',
       <String, dynamic>{
@@ -118,12 +127,18 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
     bool clientOnly = false,
   }) {
     assert(text == null || text.length <= 1024);
-    assert(imageUris.isNotEmpty && imageUris.every((Uri element) => element.isScheme('file')) && imageUris.map((Uri element) => File.fromUri(element).lengthSync()).reduce((int value, int element) => value + element) <= 30 * 1024 * 1024);
+    assert(imageUris.isNotEmpty &&
+        imageUris.every((Uri element) => element.isScheme('file')) &&
+        imageUris
+                .map((Uri element) => File.fromUri(element).lengthSync())
+                .reduce((int value, int element) => value + element) <=
+            30 * 1024 * 1024);
     return methodChannel.invokeMethod<void>(
       'shareMultiImage',
       <String, dynamic>{
         if (text != null && text.isNotEmpty) 'text': text,
-        'imageUris': imageUris.map((Uri element) => element.toString()).toList(),
+        'imageUris':
+            imageUris.map((Uri element) => element.toString()).toList(),
         'clientOnly': clientOnly,
       },
     );
@@ -136,7 +151,8 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
     bool clientOnly = false,
   }) {
     assert(text == null || text.length <= 1024);
-    assert(videoUri.isScheme('file') && File.fromUri(videoUri).lengthSync() <= 50 * 1024 * 1024);
+    assert(videoUri.isScheme('file') &&
+        File.fromUri(videoUri).lengthSync() <= 50 * 1024 * 1024);
     return methodChannel.invokeMethod<void>(
       'shareVideo',
       <String, dynamic>{
