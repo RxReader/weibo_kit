@@ -32,25 +32,7 @@ flutter版新浪微博SDK
 # 混淆已打入 Library，随 Library 引用，自动添加到 apk 打包混淆
 ```
 
-#### 获取 android 微信签名信息
-
-非官方方法 -> 反编译 app_signatures.apk 所得
-
-命令：
-
-```shell
-keytool -list -v -keystore ${your_keystore_path} -storepass ${your_keystore_password} 2>/dev/null | grep -p 'MD5:.*' -o | sed 's/MD5://' | sed 's/ //g' | sed 's/://g' | awk '{print tolower($0)}'
-```
-
-示例：
-
-```shell
-keytool -list -v -keystore example/android/app/infos/dev.jks -storepass 123456 2>/dev/null | grep -p 'MD5:.*' -o | sed 's/MD5://' | sed 's/ //g' | sed 's/://g' | awk '{print tolower($0)}'
-```
-
-```shell
-28424130a4416d519e00946651d53a46
-```
+* [获取 Android 签名信息](https://github.com/RxReader/wechat_kit#android)
 
 ## ios
 
