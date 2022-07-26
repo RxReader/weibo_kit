@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 指定共享文件的目录路径-->
+
+    <!-- 等同于 Context.getExternalFilesDir(null)-->
+    <!--
+    <external-files-path
+        name="share_files"
+        path="." />
+        -->
+
+    <!-- 等同于 Context.getExternalCacheDirs(null)-->
+    <!--
+    <external-cache-path
+        name="share_cache_files"
+        path="." />
+        -->
+
+    <root-path name="root" path="" />
+    <files-path name="files" path="" />
+    <cache-path name="cache" path="" />
+    <external-path name="external" path="" />
+    <external-files-path name="external_files" path="" />
+    <external-cache-path name="external_cache" path="" />
+    <external-media-path name="external_media" path="" />
+</paths>

@@ -140,26 +140,26 @@ class _HomeState extends State<Home> {
           ListTile(
             title: Text('图片分享'),
             onTap: () async {
-              File file = await DefaultCacheManager().getSingleFile(
+              final File file = await DefaultCacheManager().getSingleFile(
                   'https://www.baidu.com/img/bd_logo1.png?where=super');
-              if (Platform.isAndroid) {
-                // 仅支持 Context.getExternalFilesDir(null)/Context.getExternalCacheDirs(null) 路径分享
-                // path_provider.getExternalCacheDirectories();
-                // path_provider.getExternalStorageDirectory();
-                final Directory temporaryDir =
-                    await path_provider.getTemporaryDirectory();
-                if (path.isWithin(temporaryDir.parent.path, file.path)) {
-                  // 复制
-                  final File copyFile = File(path.join(
-                      (await path_provider.getExternalStorageDirectory())!.path,
-                      path.basename(file.path)));
-                  if (copyFile.existsSync()) {
-                    await copyFile.delete();
-                  }
-                  await copyFile.writeAsBytes(await file.readAsBytes());
-                  file = copyFile;
-                }
-              }
+              // if (Platform.isAndroid) {
+              //   // 仅支持 Context.getExternalFilesDir(null)/Context.getExternalCacheDirs(null) 路径分享
+              //   // path_provider.getExternalCacheDirectories();
+              //   // path_provider.getExternalStorageDirectory();
+              //   final Directory temporaryDir =
+              //       await path_provider.getTemporaryDirectory();
+              //   if (path.isWithin(temporaryDir.parent.path, file.path)) {
+              //     // 复制
+              //     final File copyFile = File(path.join(
+              //         (await path_provider.getExternalStorageDirectory())!.path,
+              //         path.basename(file.path)));
+              //     if (copyFile.existsSync()) {
+              //       await copyFile.delete();
+              //     }
+              //     await copyFile.writeAsBytes(await file.readAsBytes());
+              //     file = copyFile;
+              //   }
+              // }
               await Weibo.instance.shareMultiImage(
                 text: 'Share Text',
                 imageUris: <Uri>[Uri.file(file.path)],

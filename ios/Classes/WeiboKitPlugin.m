@@ -83,7 +83,7 @@
         message.text = call.arguments[@"text"];
         WBImageObject *object = [WBImageObject object];
         NSArray *imageUris = call.arguments[@"imageUris"];
-        NSMutableArray<UIImage *>* images = [[NSMutableArray alloc] init];
+        NSMutableArray<UIImage *> *images = [[NSMutableArray alloc] init];
         for (NSString *imageUri in imageUris) {
             NSURL *imageUrl = [NSURL URLWithString:imageUri];
             [images addObject:[UIImage imageWithContentsOfFile:imageUrl.path]];

@@ -1,3 +1,8 @@
+## 4.0.1
+
+* fix
+* shareMultiImage/shareVideo
+
 ## 4.0.0
 
 * 升级 Flutter 3.0

@@ -1,6 +1,6 @@
 name: weibo_kit
 description: A powerful Flutter plugin allowing developers to auth/share with natvie Android & iOS Weibo SDKs.
-version: 4.0.0
+version: 4.0.1
 # author: v7lin <v7lin@qq.com>
 homepage: https://github.com/RxReader/weibo_kit.git
 

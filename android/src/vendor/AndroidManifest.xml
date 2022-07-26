@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.github.v7lin.weibo_kit">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,4 +9,18 @@
         <!-- targetSdkVersion>=30 -> Android 11 软件包可见性 -->
         <package android:name="com.sina.weibo" />
     </queries>
+
+    <application>
+        <!--覆盖 aar -->
+        <provider
+            android:name="com.sina.weibo.sdk.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/weibo_kit_filepaths"
+                tools:replace="android:resource"/>
+        </provider>
+    </application>
 </manifest>
