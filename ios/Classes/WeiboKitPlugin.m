@@ -35,13 +35,16 @@
         result(nil);
     } else if ([@"isInstalled" isEqualToString:call.method]) {
         result([NSNumber numberWithBool:[WeiboSDK isWeiboAppInstalled]]);
+    } else if ([@"isSupportMultipleImage" isEqualToString:call.method]) {
+        result([NSNumber numberWithBool:YES]);
     } else if ([@"auth" isEqualToString:call.method]) {
         [self handleAuthCall:call result:result];
-    } else if ([@"shareText" isEqualToString:call.method]) {
-        [self handleShareTextCall:call result:result];
-    } else if ([@"shareImage" isEqualToString:call.method] ||
+    } else if ([@"shareText" isEqualToString:call.method] ||
+               [@"shareImage" isEqualToString:call.method] ||
+               [@"shareMultiImage" isEqualToString:call.method] ||
+               [@"shareVideo" isEqualToString:call.method] ||
                [@"shareWebpage" isEqualToString:call.method]) {
-        [self handleShareMediaCall:call result:result];
+        [self handleShareCall:call result:result];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -60,22 +63,11 @@
     result(nil);
 }
 
-- (void)handleShareTextCall:(FlutterMethodCall *)call result:(FlutterResult)result {
-    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest request];
+- (void)handleShareCall:(FlutterMethodCall *)call result:(FlutterResult)result {
     WBMessageObject *message = [WBMessageObject message];
-    message.text = call.arguments[@"text"];
-    request.message = message;
-    [WeiboSDK sendRequest:request
-               completion:^(BOOL success){
-                   // do nothing
-               }];
-    result(nil);
-}
-
-- (void)handleShareMediaCall:(FlutterMethodCall *)call result:(FlutterResult)result {
-    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest request];
-    WBMessageObject *message = [WBMessageObject message];
-    if ([@"shareImage" isEqualToString:call.method]) {
+    if ([@"shareText" isEqualToString:call.method]) {
+        message.text = call.arguments[@"text"];
+    } else if ([@"shareImage" isEqualToString:call.method]) {
         message.text = call.arguments[@"text"];
         WBImageObject *object = [WBImageObject object];
         FlutterStandardTypedData *imageData = call.arguments[@"imageData"];
@@ -87,6 +79,23 @@
             object.imageData = [NSData dataWithContentsOfFile:imageUrl.path];
         }
         message.imageObject = object;
+    } else if ([@"shareMultiImage" isEqualToString:call.method]) {
+        message.text = call.arguments[@"text"];
+        WBImageObject *object = [WBImageObject object];
+        NSArray *imageUris = call.arguments[@"imageUris"];
+        NSMutableArray<UIImage *>* images = [[NSMutableArray alloc] init];
+        for (NSString *imageUri in imageUris) {
+            NSURL *imageUrl = [NSURL URLWithString:imageUri];
+            [images addObject:[UIImage imageWithContentsOfFile:imageUrl.path]];
+        }
+        [object addImages:images];
+        message.imageObject = object;
+    } else if ([@"shareVideo" isEqualToString:call.method]) {
+        message.text = call.arguments[@"text"];
+        WBNewVideoObject *object = [WBNewVideoObject object];
+        NSString *videoUri = call.arguments[@"videoUri"];
+        [object addVideo:[NSURL URLWithString:videoUri]];
+        message.videoObject = object;
     } else if ([@"shareWebpage" isEqualToString:call.method]) {
         WBWebpageObject *object = [WBWebpageObject object];
         object.objectID = [[NSUUID UUID].UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
@@ -99,6 +108,7 @@
         object.webpageUrl = call.arguments[@"webpageUrl"];
         message.mediaObject = object;
     }
+    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest request];
     request.message = message;
     [WeiboSDK sendRequest:request
                completion:^(BOOL success){

@@ -118,7 +118,7 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
     bool clientOnly = false,
   }) {
     assert(text == null || text.length <= 1024);
-    assert(imageUris.isNotEmpty && imageUris.every((Uri element) => element.isScheme('file')));
+    assert(imageUris.isNotEmpty && imageUris.every((Uri element) => element.isScheme('file')) && imageUris.map((Uri element) => File.fromUri(element).lengthSync()).reduce((int value, int element) => value + element) <= 30 * 1024 * 1024);
     return methodChannel.invokeMethod<void>(
       'shareMultiImage',
       <String, dynamic>{
@@ -136,7 +136,7 @@ class MethodChannelWeiboKit extends WeiboKitPlatform {
     bool clientOnly = false,
   }) {
     assert(text == null || text.length <= 1024);
-    assert(videoUri.isScheme('file'));
+    assert(videoUri.isScheme('file') && File.fromUri(videoUri).lengthSync() <= 50 * 1024 * 1024);
     return methodChannel.invokeMethod<void>(
       'shareVideo',
       <String, dynamic>{

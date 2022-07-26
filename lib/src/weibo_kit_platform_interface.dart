@@ -63,18 +63,18 @@ abstract class WeiboKitPlatform extends PlatformInterface {
   /// 分享 - 文本
   Future<void> shareText({
     required String text,
-    bool clientOnly = false,
+    bool clientOnly = false/* Android Only */,
   }) {
     throw UnimplementedError('shareText({required text, clientOnly}) has not been implemented.');
   }
 
   /// 分享 - 图片
-  /// 图片文件分享用 shareMultiImage
+  /// Android 图片文件分享用 shareMultiImage
   Future<void> shareImage({
     String? text,
     Uint8List? imageData,
     Uri? imageUri,
-    bool clientOnly = false,
+    bool clientOnly = false/* Android Only */,
   }) {
     throw UnimplementedError('shareImage({text, imageData, imageUri, clientOnly}) has not been implemented.');
   }
@@ -83,7 +83,7 @@ abstract class WeiboKitPlatform extends PlatformInterface {
   Future<void> shareMultiImage({
     String? text,
     required List<Uri> imageUris,
-    bool clientOnly = false,
+    bool clientOnly = false/* Android Only */,
   }) {
     throw UnimplementedError('shareMultiImage({text, required imageUris, clientOnly}) has not been implemented.');
   }
@@ -92,19 +92,18 @@ abstract class WeiboKitPlatform extends PlatformInterface {
   Future<void> shareVideo({
     String? text,
     required Uri videoUri,
-    bool clientOnly = false,
+    bool clientOnly = false/* Android Only */,
   }) {
     throw UnimplementedError('shareVideo({text, required videoUri, clientOnly}) has not been implemented.');
   }
 
   /// 分享 - 网页
-  /// iOS：分享多媒体已经弃用 请不要用相关api
   Future<void> shareWebpage({
     required String title,
     required String description,
     required Uint8List thumbData,
     required String webpageUrl,
-    bool clientOnly = false,
+    bool clientOnly = false/* Android Only */,
   }) {
     throw UnimplementedError('shareWebpage({required title, required description, required thumbData, required webpageUrl, clientOnly}) has not been implemented.');
   }
