@@ -149,11 +149,11 @@
             NSString *userId = authorizeResponse.userID;
             NSString *accessToken = authorizeResponse.accessToken;
             NSString *refreshToken = authorizeResponse.refreshToken;
-            long long expiresIn = ceil(authorizeResponse.expirationDate.timeIntervalSinceNow); // 向上取整
+            long long expiresTime = authorizeResponse.expirationDate.timeIntervalSince1970 * 1000;
             [dictionary setValue:userId forKey:@"userId"];
             [dictionary setValue:accessToken forKey:@"accessToken"];
             [dictionary setValue:refreshToken forKey:@"refreshToken"];
-            [dictionary setValue:[NSNumber numberWithLongLong:expiresIn] forKey:@"expiresIn"];
+            [dictionary setValue:[NSNumber numberWithLongLong:expiresTime] forKey:@"expiresTime"];
         }
         [_channel invokeMethod:@"onAuthResp" arguments:dictionary];
     } else if ([response isKindOfClass:[WBSendMessageToWeiboResponse class]]) {

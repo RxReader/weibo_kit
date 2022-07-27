@@ -2,6 +2,7 @@
 
 * fix
 * shareMultiImage/shareVideo
+* breake change: expiresIn -> expiresTime
 
 ## 4.0.0
 

@@ -6,16 +6,14 @@ part of 'resp.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AuthResp _$AuthRespFromJson(Map<String, dynamic> json) {
-  return AuthResp(
-    errorCode: json['errorCode'] as int? ?? 0,
-    errorMessage: json['errorMessage'] as String?,
-    userId: json['userId'] as String?,
-    accessToken: json['accessToken'] as String?,
-    refreshToken: json['refreshToken'] as String?,
-    expiresIn: json['expiresIn'] as int?,
-  );
-}
+AuthResp _$AuthRespFromJson(Map<String, dynamic> json) => AuthResp(
+      errorCode: json['errorCode'] as int? ?? 0,
+      errorMessage: json['errorMessage'] as String?,
+      userId: json['userId'] as String?,
+      accessToken: json['accessToken'] as String?,
+      refreshToken: json['refreshToken'] as String?,
+      expiresTime: json['expiresTime'] as int?,
+    );
 
 Map<String, dynamic> _$AuthRespToJson(AuthResp instance) => <String, dynamic>{
       'errorCode': instance.errorCode,
@@ -23,15 +21,13 @@ Map<String, dynamic> _$AuthRespToJson(AuthResp instance) => <String, dynamic>{
       'userId': instance.userId,
       'accessToken': instance.accessToken,
       'refreshToken': instance.refreshToken,
-      'expiresIn': instance.expiresIn,
+      'expiresTime': instance.expiresTime,
     };
 
-ShareMsgResp _$ShareMsgRespFromJson(Map<String, dynamic> json) {
-  return ShareMsgResp(
-    errorCode: json['errorCode'] as int? ?? 0,
-    errorMessage: json['errorMessage'] as String?,
-  );
-}
+ShareMsgResp _$ShareMsgRespFromJson(Map<String, dynamic> json) => ShareMsgResp(
+      errorCode: json['errorCode'] as int? ?? 0,
+      errorMessage: json['errorMessage'] as String?,
+    );
 
 Map<String, dynamic> _$ShareMsgRespToJson(ShareMsgResp instance) =>
     <String, dynamic>{

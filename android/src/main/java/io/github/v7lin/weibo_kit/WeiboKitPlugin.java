@@ -205,8 +205,7 @@ public class WeiboKitPlugin implements FlutterPlugin, ActivityAware, PluginRegis
                     map.put("userId", token.getUid());
                     map.put("accessToken", token.getAccessToken());
                     map.put("refreshToken", token.getRefreshToken());
-                    final long expiresIn = (long) Math.ceil(token.getExpiresTime() / 1000.0);
-                    map.put("expiresIn", expiresIn);// 向上取整
+                    map.put("expiresTime", token.getExpiresTime());
                 } else {
                     map.put("errorCode", WeiboErrorCode.UNKNOWN);
                 }

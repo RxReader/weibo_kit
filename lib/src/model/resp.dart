@@ -63,7 +63,7 @@ class AuthResp extends BaseResp {
     this.userId,
     this.accessToken,
     this.refreshToken,
-    this.expiresIn,
+    this.expiresTime,
   });
 
   factory AuthResp.fromJson(Map<String, dynamic> json) =>
@@ -72,7 +72,7 @@ class AuthResp extends BaseResp {
   final String? userId;
   final String? accessToken;
   final String? refreshToken;
-  final int? expiresIn;
+  final int? expiresTime;
 
   @override
   Map<String, dynamic> toJson() => _$AuthRespToJson(this);
